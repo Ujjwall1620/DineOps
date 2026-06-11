@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+
+*.iml
+
+target/
+build/
+
+logs/
+*.log
