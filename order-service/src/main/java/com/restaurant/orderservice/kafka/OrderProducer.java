@@ -63,6 +63,16 @@ public class OrderProducer {
     }
 
     private OrderEvent buildOrderEvent(Order order, String eventType) {
+        var orderItems = order.getItems().stream()
+                .map(item -> OrderEvent.OrderItemEvent.builder()
+                        .menuItemId(item.getMenuItemId())
+                        .menuItemName(item.getMenuItemName())
+                        .quantity(item.getQuantity())
+                        .pricePerUnit(item.getPricePerUnit())
+                        .subtotal(item.getSubtotal())
+                        .build())
+                .toList();
+
         return OrderEvent.builder()
                 .orderId(order.getId())
                 .orderNumber(order.getOrderNumber())
@@ -73,6 +83,7 @@ public class OrderProducer {
                 .totalAmount(order.getTotalAmount())
                 .eventType(eventType)
                 .eventTimestamp(LocalDateTime.now())
+                .items(orderItems)
                 .build();
     }
 }

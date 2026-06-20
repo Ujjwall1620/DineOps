@@ -32,7 +32,7 @@ public class OrderController {
      * Waiter details are extracted from JWT — not from the request body.
      */
     @PostMapping
-    @PreAuthorize("hasAnyRole('WAITER', 'ADMIN')")
+    @PreAuthorize("hasRole('WAITER')")
     public ResponseEntity<ApiResponse<OrderResponse>> createOrder(
             @Valid @RequestBody CreateOrderRequest request,
             @AuthenticationPrincipal JwtUserDetails waiter) {

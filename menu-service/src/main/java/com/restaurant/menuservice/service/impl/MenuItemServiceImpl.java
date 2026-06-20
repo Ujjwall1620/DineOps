@@ -9,7 +9,6 @@ import com.restaurant.menuservice.entity.MenuItem;
 import com.restaurant.menuservice.enums.MenuCategory;
 import com.restaurant.menuservice.exception.MenuAlreadyExistsException;
 import com.restaurant.menuservice.exception.MenuItemNotFoundException;
-import com.restaurant.menuservice.kafka.MenuProducer;
 import com.restaurant.menuservice.repository.MenuItemRepository;
 import com.restaurant.menuservice.service.MenuItemMapper;
 import com.restaurant.menuservice.service.MenuItemService;
@@ -28,7 +27,6 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
     private final MenuItemMapper     menuItemMapper;
-    private final MenuProducer       menuProducer;
 
     // ─── Create ────────────────────────────────────────────────────────────────
 
@@ -53,7 +51,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         MenuItem saved = menuItemRepository.save(item);
         log.info("Menu item created with id: {}", saved.getId());
 
-        menuProducer.publishMenuCreated(saved);
+
         return menuItemMapper.toMenuItemResponse(saved);
     }
 
@@ -95,7 +93,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         MenuItem saved = menuItemRepository.save(item);
         log.info("Menu item updated: {}", saved.getId());
 
-        menuProducer.publishMenuUpdated(saved);
+
         return menuItemMapper.toMenuItemResponse(saved);
     }
 
@@ -108,7 +106,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         MenuItem item = findById(id);
         menuItemRepository.delete(item);
         log.info("Menu item deleted: {}", id);
-        menuProducer.publishMenuDeleted(item);
+
     }
 
     // ─── Toggle Availability ───────────────────────────────────────────────────
@@ -120,7 +118,6 @@ public class MenuItemServiceImpl implements MenuItemService {
         MenuItem item = findById(id);
         item.setAvailable(request.getAvailable());
         MenuItem saved = menuItemRepository.save(item);
-        menuProducer.publishAvailabilityChanged(saved);
         return menuItemMapper.toMenuItemResponse(saved);
     }
 

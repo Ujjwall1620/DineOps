@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BackgroundAgentGlobalSettings">
+    <option name="selectedModelId" value="auto" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="67a9b05b-8fe9-4a42-a805-bb1903b61707" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/menu-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/kafka/KafkaConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/kafka/MenuEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/kafka/MenuProducer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/service/impl/MenuItemServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/service/impl/MenuItemServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/target/classes/com/restaurant/menuservice/kafka/KafkaConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/target/classes/com/restaurant/menuservice/kafka/MenuEvent$MenuEventBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/target/classes/com/restaurant/menuservice/kafka/MenuEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/target/classes/com/restaurant/menuservice/kafka/MenuProducer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/target/classes/com/restaurant/menuservice/service/impl/MenuItemServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/target/classes/com/restaurant/menuservice/service/impl/MenuItemServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/kafka/OrderEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/kafka/OrderEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/kafka/OrderProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/kafka/OrderProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/OrderServiceApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/OrderServiceApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/client/FeignJwtConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/client/FeignJwtConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/client/MenuClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/client/MenuClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/client/MenuClientFallback.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/client/MenuClientFallback.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/controller/OrderController.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/controller/OrderController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/request/CreateOrderRequest$CreateOrderRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/request/CreateOrderRequest$CreateOrderRequestBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/request/CreateOrderRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/request/CreateOrderRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/request/OrderItemRequest$OrderItemRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/request/OrderItemRequest$OrderItemRequestBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/request/OrderItemRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/request/OrderItemRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/request/UpdateOrderRequest$UpdateOrderRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/request/UpdateOrderRequest$UpdateOrderRequestBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/request/UpdateOrderRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/request/UpdateOrderRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/ApiResponse$ApiResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/ApiResponse$ApiResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/ApiResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/ApiResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/MenuItemResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/MenuItemResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/OrderItemResponse$OrderItemResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/OrderItemResponse$OrderItemResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/OrderItemResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/OrderItemResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/OrderResponse$OrderResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/OrderResponse$OrderResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/OrderResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/dto/response/OrderResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/entity/Order$OrderBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/entity/Order$OrderBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/entity/Order.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/entity/Order.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/entity/OrderItem$OrderItemBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/entity/OrderItem$OrderItemBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/entity/OrderItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/entity/OrderItem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/enums/OrderStatus.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/enums/OrderStatus.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/exception/GlobalExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/exception/GlobalExceptionHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/exception/MenuItemNotFoundException.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/exception/MenuItemNotFoundException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/exception/MenuServiceUnavailableException.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/exception/MenuServiceUnavailableException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/exception/OrderCancellationException.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/exception/OrderCancellationException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/exception/OrderNotFoundException.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/exception/OrderNotFoundException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/exception/OutOfStockException.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/exception/OutOfStockException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/kafka/KafkaConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/kafka/KafkaConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/kafka/OrderEvent$OrderEventBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/kafka/OrderEvent$OrderEventBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/kafka/OrderEvent.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/kafka/OrderEvent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/kafka/OrderProducer.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/kafka/OrderProducer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/repository/OrderItemRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/repository/OrderItemRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/repository/OrderRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/repository/OrderRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/security/JwtAuthEntryPoint.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/security/JwtAuthEntryPoint.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/security/JwtAuthenticationFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/security/JwtAuthenticationFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/security/JwtUserDetails$JwtUserDetailsBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/security/JwtUserDetails$JwtUserDetailsBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/security/JwtUserDetails.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/security/JwtUserDetails.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/security/JwtUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/security/JwtUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/security/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/security/SecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/service/OrderMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/service/OrderMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/service/OrderNumberGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/service/OrderNumberGenerator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/service/OrderService.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/service/OrderService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/service/impl/OrderServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/com/restaurant/orderservice/service/impl/OrderServiceImpl.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/Ujjwal/projects/DineOps/kitchen-service" value="3Eo46bBtMTRuIHeixSReMcphYM9" />
+    </persistenceIdMap>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="3Eo46bBtMTRuIHeixSReMcphYM9" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.AuthServiceApplication.executor": "Run",
+    "Application.KitchenServiceApplication.executor": "Run",
+    "Application.MenuServiceApplication.executor": "Run",
+    "Application.OrderServiceApplication.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "copilot.chat.legacySessionMetadata.migrated": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Ujjwal/projects/DineOps",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.kitchen_Service.Serivce" />
+      <recent name="com.example.kitchen_Service.Repository." />
+      <recent name="com.example.kitchen_Service.DTO." />
+      <recent name="com.example.kitchen_Service.Serivce." />
+    </key>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="67a9b05b-8fe9-4a42-a805-bb1903b61707" name="Changes" comment="" />
+      <created>1780831413875</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1780831413875</updated>
+    </task>
+    <servers />
+  </component>
+</project>
