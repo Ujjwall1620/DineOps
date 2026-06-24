@@ -7,9 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="order-service" />
         <module name="menu-service" />
         <module name="kitchen-service" />
-        <module name="order-service" />
+        <module name="bill-service" />
       </profile>
       <profile name="Annotation profile for Auth-Service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -29,6 +30,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Auth-Service" options="-parameters" />
+      <module name="bill-service" options="-parameters" />
       <module name="kitchen-Service" options="-parameters" />
       <module name="kitchen-service" options="-parameters" />
       <module name="menu-service" options="-parameters" />
