@@ -29,7 +29,8 @@ DineOps is built around the following principles:
 2. The `kitchen-service` receives the order and updates kitchen status while preparing items.
 3. When the order is ready, kitchen events are published and the `bill-service` generates a bill.
 4. The `bill-service` manages payment processing and finalizes the transaction.
-5. The `Auth-service` secures access and manages user credentials.
+5. Razorpay Payment Integration
+6. The `Auth-service` secures access and manages user credentials.
 
 ## Technology stack
 
