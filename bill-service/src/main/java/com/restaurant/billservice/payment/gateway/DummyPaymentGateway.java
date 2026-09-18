@@ -8,11 +8,6 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-/**
- * Dummy gateway for development and testing.
- * Always succeeds. No external API calls.
- * Set payment.gateway=dummy in application.properties.
- */
 @Component
 @Slf4j
 public class DummyPaymentGateway implements PaymentGateway {

@@ -19,7 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String username;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false )
     private String email;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

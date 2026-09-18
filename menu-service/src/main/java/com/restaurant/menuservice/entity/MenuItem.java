@@ -37,10 +37,6 @@ public class MenuItem {
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    /**
-     * Controls whether Order Service can place this item.
-     * Disabled items are still returned in admin views but cannot be ordered.
-     */
     @Column(name = "available", nullable = false)
     @Builder.Default
     private Boolean available = true;

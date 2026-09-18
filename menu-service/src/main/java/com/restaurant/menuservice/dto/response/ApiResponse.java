@@ -29,14 +29,6 @@ public class ApiResponse<T> {
                 .build();
     }
 
-    public static <T> ApiResponse<T> success(String message) {
-        return ApiResponse.<T>builder()
-                .timestamp(LocalDateTime.now())
-                .status(200)
-                .message(message)
-                .build();
-    }
-
     public static <T> ApiResponse<T> created(String message, T data) {
         return ApiResponse.<T>builder()
                 .timestamp(LocalDateTime.now())

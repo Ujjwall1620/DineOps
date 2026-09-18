@@ -18,7 +18,7 @@ public class JwtUtil {
             "VGhpc0lzQVN1cGVyU2VjdXJlSldUU2VjcmV0S2V5Rm9ySFMyNTY=";
 
     public String genrateToken(String email){
-        User user = repository.findByEmail(email);
+        User user = repository.findByEmailCaseSensitive(email);
         return Jwts.builder()
                 .setSubject(email)
                 .claim("role",user.getRole())

@@ -9,10 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-/**
- * All fields are optional for partial updates.
- * Only non-null fields are applied by the service layer.
- */
 @Data
 @Builder
 @NoArgsConstructor
