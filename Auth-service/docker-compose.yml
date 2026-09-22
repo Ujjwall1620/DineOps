@@ -1,56 +1,14 @@
+services:
 
-  services:
+  auth-service:
+    image: ujjwall1620/dineops-auth:latest
+    container_name: dineops-auth
+    restart: unless-stopped
 
-    auth-service:
-      build:
-        context: .
-        dockerfile: Dockerfile
-      container_name: dineops-auth
-      restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://${DB_HOST}:3306/dineops_auth
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
 
-      environment:
-        SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/dineops_auth
-        SPRING_DATASOURCE_USERNAME: dineops_user
-        SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
-
-      depends_on:
-        mysql:
-          condition: service_healthy
-
-      ports:
-        - "8081:8081"
-
-
-    mysql:
-      image: mysql:8.0
-      container_name: dineops-mysql
-      restart: unless-stopped
-
-      environment:
-        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-        MYSQL_DATABASE: dineops_auth
-        MYSQL_USER: dineops_user
-        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-
-      volumes:
-        - mysql_data:/var/lib/mysql
-
-      healthcheck:
-        test:
-          [
-            "CMD",
-            "mysqladmin",
-            "ping",
-            "-h",
-            "localhost",
-            "-uroot",
-            "-p${MYSQL_ROOT_PASSWORD}"
-          ]
-        interval: 10s
-        timeout: 5s
-        retries: 5
-
-
-  volumes:
-    mysql_data:
-
+    ports:
+      - "8081:8081"
