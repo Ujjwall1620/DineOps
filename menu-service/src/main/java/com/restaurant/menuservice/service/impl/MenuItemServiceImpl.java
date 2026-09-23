@@ -10,6 +10,7 @@ import com.restaurant.menuservice.enums.MenuCategory;
 import com.restaurant.menuservice.exception.MenuAlreadyExistsException;
 import com.restaurant.menuservice.exception.MenuItemNotFoundException;
 import com.restaurant.menuservice.repository.MenuItemRepository;
+import com.restaurant.menuservice.security.JwtUtil;
 import com.restaurant.menuservice.service.MenuItemMapper;
 import com.restaurant.menuservice.service.MenuItemService;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +27,34 @@ import java.util.List;
 public class MenuItemServiceImpl implements MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
-    private final MenuItemMapper     menuItemMapper;
+    private final MenuItemMapper menuItemMapper;
+    private final JwtUtil jwtUtil;
 
-    // ─── Create ────────────────────────────────────────────────────────────────
 
-    @Override
+    // ============================================================
+    // CREATE
+    // ============================================================
+
     @Transactional
-    public MenuItemResponse createMenuItem(CreateMenuItemRequest request) {
-        log.info("Creating menu item: {}", request.getName());
+    @Override
+    public MenuItemResponse createMenuItem(
+            CreateMenuItemRequest request,
+            String token
+    ) {
 
-        if (menuItemRepository.existsByNameIgnoreCase(request.getName())) {
+        Long restaurantId = jwtUtil.extractRestaurantId(token);
+
+        log.info(
+                "Creating menu item: {} for restaurantId: {}",
+                request.getName(),
+                restaurantId
+        );
+
+        // Check duplicate name only inside this restaurant
+        if (menuItemRepository.existsByNameIgnoreCaseAndRestaurantId(
+                request.getName().trim(),
+                restaurantId
+        )) {
             throw new MenuAlreadyExistsException(request.getName());
         }
 
@@ -44,135 +63,303 @@ public class MenuItemServiceImpl implements MenuItemService {
                 .description(request.getDescription())
                 .category(request.getCategory())
                 .price(request.getPrice())
-                .available(request.getAvailable() != null ? request.getAvailable() : true)
+                .available(
+                        request.getAvailable() != null
+                                ? request.getAvailable()
+                                : true
+                )
                 .imageUrl(request.getImageUrl())
+                .restaurantId(restaurantId)
                 .build();
 
         MenuItem saved = menuItemRepository.save(item);
-        log.info("Menu item created with id: {}", saved.getId());
 
+        log.info(
+                "Menu item created with id: {} for restaurantId: {}",
+                saved.getId(),
+                restaurantId
+        );
 
         return menuItemMapper.toMenuItemResponse(saved);
     }
 
-    // ─── Update ────────────────────────────────────────────────────────────────
 
-    @Override
+    // ============================================================
+    // UPDATE
+    // ============================================================
+
     @Transactional
-    public MenuItemResponse updateMenuItem(Long id, UpdateMenuItemRequest request) {
-        log.info("Updating menu item id: {}", id);
+    @Override
+    public MenuItemResponse updateMenuItem(
+            Long id,
+            UpdateMenuItemRequest request,
+            String token
+    ) {
 
-        MenuItem item = findById(id);
+        Long restaurantId = jwtUtil.extractRestaurantId(token);
 
-        // Partial update: only apply non-null fields
+        log.info(
+                "Updating menu item id: {} for restaurantId: {}",
+                id,
+                restaurantId
+        );
+
+        MenuItem item = findByIdAndRestaurantId(id, restaurantId);
+
         if (StringUtils.hasText(request.getName())) {
+
             String newName = request.getName().trim();
-            // Guard against duplicate name only if the name is actually changing
+
+            // Check duplicate only when name is actually changing
             if (!newName.equalsIgnoreCase(item.getName())
-                    && menuItemRepository.existsByNameIgnoreCase(newName)) {
+                    && menuItemRepository.existsByNameIgnoreCaseAndRestaurantId(
+                    newName,
+                    restaurantId
+            )) {
+
                 throw new MenuAlreadyExistsException(newName);
             }
+
             item.setName(newName);
         }
+
         if (request.getDescription() != null) {
             item.setDescription(request.getDescription());
         }
+
         if (request.getCategory() != null) {
             item.setCategory(request.getCategory());
         }
+
         if (request.getPrice() != null) {
             item.setPrice(request.getPrice());
         }
+
         if (request.getAvailable() != null) {
             item.setAvailable(request.getAvailable());
         }
+
         if (request.getImageUrl() != null) {
             item.setImageUrl(request.getImageUrl());
         }
 
-        MenuItem saved = menuItemRepository.save(item);
-        log.info("Menu item updated: {}", saved.getId());
 
+        MenuItem saved = menuItemRepository.save(item);
+
+        log.info(
+                "Menu item updated: {} for restaurantId: {}",
+                saved.getId(),
+                restaurantId
+        );
 
         return menuItemMapper.toMenuItemResponse(saved);
     }
 
-    // ─── Delete ────────────────────────────────────────────────────────────────
 
-    @Override
+    // ============================================================
+    // DELETE
+    // ============================================================
+
     @Transactional
-    public void deleteMenuItem(Long id) {
-        log.info("Deleting menu item id: {}", id);
-        MenuItem item = findById(id);
+    @Override
+    public void deleteMenuItem(
+            Long id,
+            String token
+    ) {
+
+        Long restaurantId = jwtUtil.extractRestaurantId(token);
+
+        log.info(
+                "Deleting menu item id: {} for restaurantId: {}",
+                id,
+                restaurantId
+        );
+
+        // Only delete if menu item belongs to this restaurant
+        MenuItem item = findByIdAndRestaurantId(id, restaurantId);
+
         menuItemRepository.delete(item);
-        log.info("Menu item deleted: {}", id);
 
+        log.info(
+                "Menu item deleted: {} from restaurantId: {}",
+                id,
+                restaurantId
+        );
     }
 
-    // ─── Toggle Availability ───────────────────────────────────────────────────
 
-    @Override
+    // ============================================================
+    // UPDATE AVAILABILITY
+    // ============================================================
+
     @Transactional
-    public MenuItemResponse updateAvailability(Long id, AvailabilityRequest request) {
-        log.info("Updating availability for menu item id: {} → {}", id, request.getAvailable());
-        MenuItem item = findById(id);
+    @Override
+    public MenuItemResponse updateAvailability(
+            Long id,
+            AvailabilityRequest request,
+            String token
+    ) {
+
+        Long restaurantId = jwtUtil.extractRestaurantId(token);
+
+        log.info(
+                "Updating availability for menu item id: {} for restaurantId: {} → {}",
+                id,
+                restaurantId,
+                request.getAvailable()
+        );
+
+        // Check restaurant ownership
+        MenuItem item = findByIdAndRestaurantId(id, restaurantId);
+
         item.setAvailable(request.getAvailable());
+
         MenuItem saved = menuItemRepository.save(item);
+
         return menuItemMapper.toMenuItemResponse(saved);
     }
 
-    // ─── Read ──────────────────────────────────────────────────────────────────
 
-    @Override
+    // ============================================================
+    // GET BY ID
+    // ============================================================
+
     @Transactional(readOnly = true)
-    public MenuItemResponse getMenuItemById(Long id) {
-        return menuItemMapper.toMenuItemResponse(findById(id));
+    @Override
+    public MenuItemResponse getMenuItemById(
+            Long id,
+            String token
+    ) {
+
+        Long restaurantId = jwtUtil.extractRestaurantId(token);
+
+        MenuItem item = findByIdAndRestaurantId(id, restaurantId);
+
+        return menuItemMapper.toMenuItemResponse(item);
     }
 
-    /**
-     * Called indirectly by Order Service via GET /api/menu/{id}.
-     * Returns the slim {@link MenuItemSummaryResponse} contract.
-     */
-    @Override
+
+    // ============================================================
+    // GET SUMMARY BY ID
+    // ============================================================
+
     @Transactional(readOnly = true)
-    public MenuItemSummaryResponse getMenuItemSummaryById(Long id) {
-        return menuItemMapper.toMenuItemSummaryResponse(findById(id));
+    @Override
+    public MenuItemSummaryResponse getMenuItemSummaryById(
+            Long id,
+            String token
+    ) {
+
+        Long restaurantId = jwtUtil.extractRestaurantId(token);
+
+        MenuItem item = findByIdAndRestaurantId(id, restaurantId);
+
+        return menuItemMapper.toMenuItemSummaryResponse(item);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<MenuItemResponse> getAllMenuItems() {
-        return menuItemMapper.toMenuItemResponseList(menuItemRepository.findAll());
-    }
 
-    @Override
+    // ============================================================
+    // GET ALL MENU ITEMS
+    // ============================================================
+
     @Transactional(readOnly = true)
-    public List<MenuItemResponse> getMenuItemsByCategory(MenuCategory category) {
+    @Override
+    public List<MenuItemResponse> getAllMenuItems(
+            String token
+    ) {
+
+        Long restaurantId = jwtUtil.extractRestaurantId(token);
+
         return menuItemMapper.toMenuItemResponseList(
-                menuItemRepository.findByCategory(category));
+                menuItemRepository.findAllByRestaurantId(restaurantId)
+        );
     }
 
-    @Override
+
+    // ============================================================
+    // GET BY CATEGORY
+    // ============================================================
+
     @Transactional(readOnly = true)
-    public List<MenuItemResponse> getAvailableMenuItems() {
+    @Override
+    public List<MenuItemResponse> getMenuItemsByCategory(
+            MenuCategory category,
+            String token
+    ) {
+
+        Long restaurantId = jwtUtil.extractRestaurantId(token);
+
         return menuItemMapper.toMenuItemResponseList(
-                menuItemRepository.findAllAvailableOrderByCategoryAndName());
+                menuItemRepository.findByCategoryAndRestaurantId(
+                        category,
+                        restaurantId
+                )
+        );
     }
 
-    @Override
+
+    // ============================================================
+    // GET AVAILABLE MENU
+    // ============================================================
+
     @Transactional(readOnly = true)
-    public List<MenuItemResponse> searchMenuItemsByName(String keyword) {
+    @Override
+    public List<MenuItemResponse> getAvailableMenuItems(
+            String token
+    ) {
+
+        Long restaurantId = jwtUtil.extractRestaurantId(token);
+
+        return menuItemMapper.toMenuItemResponseList(
+                menuItemRepository.findAllAvailableOrderByCategoryAndName(
+                        restaurantId
+                )
+        );
+    }
+
+
+    // ============================================================
+    // SEARCH BY NAME
+    // ============================================================
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<MenuItemResponse> searchMenuItemsByName(
+            String keyword,
+            String token
+    ) {
+
+        Long restaurantId = jwtUtil.extractRestaurantId(token);
+
         if (!StringUtils.hasText(keyword)) {
-            return getAllMenuItems();
+
+            return menuItemMapper.toMenuItemResponseList(
+                    menuItemRepository.findAllByRestaurantId(restaurantId)
+            );
         }
+
         return menuItemMapper.toMenuItemResponseList(
-                menuItemRepository.searchByName(keyword.trim()));
+                menuItemRepository.searchByName(
+                        keyword.trim(),
+                        restaurantId
+                )
+        );
     }
 
-    // ─── Helper ────────────────────────────────────────────────────────────────
 
-    private MenuItem findById(Long id) {
-        return menuItemRepository.findById(id)
-                .orElseThrow(() -> new MenuItemNotFoundException(id));
+    // ============================================================
+    // HELPER
+    // ============================================================
+
+    private MenuItem findByIdAndRestaurantId(
+            Long id,
+            Long restaurantId
+    ) {
+
+        return menuItemRepository
+                .findByIdAndRestaurantId(id, restaurantId)
+                .orElseThrow(
+                        () -> new MenuItemNotFoundException(id)
+                );
     }
 }

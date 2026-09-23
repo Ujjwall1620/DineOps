@@ -11,17 +11,53 @@ import java.util.List;
 
 public interface MenuItemService {
 
-    // ─── Write Operations ──────────────────────────────────────────────────────
-    MenuItemResponse createMenuItem(CreateMenuItemRequest request);
-    MenuItemResponse updateMenuItem(Long id, UpdateMenuItemRequest request);
-    void             deleteMenuItem(Long id);
-    MenuItemResponse updateAvailability(Long id, AvailabilityRequest request);
+    MenuItemResponse createMenuItem(
+            CreateMenuItemRequest request,
+            String token
+    );
 
-    // ─── Read Operations ───────────────────────────────────────────────────────
-    MenuItemResponse        getMenuItemById(Long id);
-    MenuItemSummaryResponse getMenuItemSummaryById(Long id);   // consumed by Order Service
-    List<MenuItemResponse>  getAllMenuItems();
-    List<MenuItemResponse>  getMenuItemsByCategory(MenuCategory category);
-    List<MenuItemResponse>  getAvailableMenuItems();
-    List<MenuItemResponse>  searchMenuItemsByName(String keyword);
+    MenuItemResponse updateMenuItem(
+            Long id,
+            UpdateMenuItemRequest request,
+            String token
+    );
+
+    void deleteMenuItem(
+            Long id,
+            String token
+    );
+
+    MenuItemResponse updateAvailability(
+            Long id,
+            AvailabilityRequest request,
+            String token
+    );
+
+    MenuItemResponse getMenuItemById(
+            Long id,
+            String token
+    );
+
+    MenuItemSummaryResponse getMenuItemSummaryById(
+            Long id,
+            String token
+    );
+
+    List<MenuItemResponse> getAllMenuItems(
+            String token
+    );
+
+    List<MenuItemResponse> getMenuItemsByCategory(
+            MenuCategory category,
+            String token
+    );
+
+    List<MenuItemResponse> getAvailableMenuItems(
+            String token
+    );
+
+    List<MenuItemResponse> searchMenuItemsByName(
+            String keyword,
+            String token
+    );
 }

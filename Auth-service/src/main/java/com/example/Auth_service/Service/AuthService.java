@@ -19,12 +19,16 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public String register(registerRequest request){
+    public String register(registerRequest request , String token){
+        if (request.getRole() != "OWNER") {
+            return "Owner can't created by user";
+        }
         User user= User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.valueOf(request.getRole().toUpperCase()))
+                .restaurantId(jwtUtil.extractRestaurantId(token))
                 .build();
 
         repository.save(user);

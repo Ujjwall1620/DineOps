@@ -1,8 +1,9 @@
 package com.example.Auth_service.Entity;
 
 public enum Role {
-    ADMIN,
+    MANAGER,
     WAITER,
     CHEF,
-    CASHIER
+    CASHIER,
+    OWNER
 }

@@ -10,9 +10,26 @@
     <list default="true" id="67a9b05b-8fe9-4a42-a805-bb1903b61707" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/Auth-service/docker-compose.yml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Auth-service/dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Controller/RestaurantController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/DTO/OwnerInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/DTO/OwnerRegisterRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/DTO/RestaurantResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Service/RestaurantService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Auth-service/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Entity/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Entity/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Repository/AuthRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Repository/AuthRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Security/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Security/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Security/securityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Security/securityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/controller/MenuItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/controller/MenuItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/entity/MenuItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/entity/MenuItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/repository/MenuItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/repository/MenuItemRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/security/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/security/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/service/MenuItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/service/MenuItemService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/service/impl/MenuItemServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/service/impl/MenuItemServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,12 +46,13 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Auth-service" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -59,38 +77,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.AuthServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.BillServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.KitchenServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.MenuServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.OrderServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;Spring Boot.AuthServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;copilot.chat.legacySessionMetadata.migrated&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Ujjwal/projects/DineOps&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.jshint&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.AuthServiceApplication.executor": "Run",
+    "Application.BillServiceApplication.executor": "Run",
+    "Application.KitchenServiceApplication.executor": "Run",
+    "Application.MenuServiceApplication.executor": "Run",
+    "Application.OrderServiceApplication.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.AuthServiceApplication.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "copilot.chat.legacySessionMetadata.migrated": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Ujjwal/projects/DineOps",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.jshint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.jshint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.example.kitchen_Service.Serivce" />

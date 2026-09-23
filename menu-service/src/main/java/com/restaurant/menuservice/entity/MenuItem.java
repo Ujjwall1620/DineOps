@@ -11,7 +11,15 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "menu_items")
+@Table(
+        name = "menu",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_menu_restaurant_name",
+                        columnNames = {"restaurant_id", "name"}
+                )
+        }
+)
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
@@ -24,7 +32,7 @@ public class MenuItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true, length = 150)
+    @Column(name = "name", nullable = false, length = 150)
     private String name;
 
     @Column(name = "description", columnDefinition = "TEXT")
@@ -51,4 +59,7 @@ public class MenuItem {
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column(name = "restaurant_id", nullable = false)
+    private Long restaurantId;
 }

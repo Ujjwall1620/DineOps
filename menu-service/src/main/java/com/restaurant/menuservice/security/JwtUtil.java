@@ -32,6 +32,13 @@ public class JwtUtil {
         return Long.parseLong(userIdClaim.toString());
     }
 
+    public Long extractRestaurantId(String token) {
+        Object restaurantIdClaim = extractAllClaims(token).get("restaurantId");
+        if (restaurantIdClaim instanceof Integer) return ((Integer) restaurantIdClaim).longValue();
+        if (restaurantIdClaim instanceof Long)    return (Long) restaurantIdClaim;
+        return Long.parseLong(restaurantIdClaim.toString());
+    }
+
     public String extractUsername(String token) {
         Claims claims = extractAllClaims(token);
         String username = (String) claims.get("username");
