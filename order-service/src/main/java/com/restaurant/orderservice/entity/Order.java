@@ -59,6 +59,10 @@ public class Order {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "restaurant_id", nullable = false)
+    private Long restaurantId;
+
+
     // Convenience method to add an item and maintain bidirectional relationship
     public void addItem(OrderItem item) {
         items.add(item);

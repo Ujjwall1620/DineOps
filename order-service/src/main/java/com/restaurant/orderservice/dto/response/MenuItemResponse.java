@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 public class MenuItemResponse {
 
     private Long id;
+    private Long restaurantId;
     private String name;
     private BigDecimal price;
     private Integer availableStock;

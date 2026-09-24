@@ -21,6 +21,7 @@ public class JwtUserDetails implements UserDetails {
     private final Long userId;
     private final String username;
     private final String role;
+    private final Long restaurantId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -57,4 +58,6 @@ public class JwtUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public Long getRestaurantId(){return restaurantId;}
 }

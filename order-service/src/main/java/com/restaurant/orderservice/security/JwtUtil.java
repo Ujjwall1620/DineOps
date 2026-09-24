@@ -55,6 +55,22 @@ public class JwtUtil {
     }
 
     /**
+     * Extract restaurant ID from JWT claims.
+     */
+
+    public  Long extractRestaurantID(String token) {
+        Claims claims = extractAllClaims(token);
+        Object restaurantIdClaim = claims.get("restaurantId");
+        if (restaurantIdClaim instanceof Integer) {
+            return ((Integer) restaurantIdClaim).longValue();
+        }
+        if (restaurantIdClaim instanceof Long) {
+            return (Long) restaurantIdClaim;
+        }
+        return Long.parseLong(restaurantIdClaim.toString());
+    }
+
+    /**
      * Extract role from JWT claims.
      */
     public String extractRole(String token) {

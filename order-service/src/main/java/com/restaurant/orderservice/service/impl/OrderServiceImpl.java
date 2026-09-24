@@ -22,6 +22,8 @@ import com.restaurant.orderservice.service.OrderService;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +31,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,165 +44,353 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderNumberGenerator orderNumberGenerator;
 
-    // ─── Create Order ──────────────────────────────────────────────────────────
 
-    @Override
+    // ============================================================
+    // CURRENT USER
+    // ============================================================
+
+    private JwtUserDetails getCurrentUser() {
+
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+        return (JwtUserDetails) authentication.getPrincipal();
+    }
+
+
+    // ============================================================
+    // CREATE ORDER
+    // ============================================================
+
     @Transactional
-    public OrderResponse createOrder(CreateOrderRequest request, JwtUserDetails waiter) {
-        log.info("Creating order for waiter: {} at table: {}", waiter.getUsername(), request.getTableNumber());
+    @Override
+    public OrderResponse createOrder(
+            CreateOrderRequest request
+    ) {
 
-        // Build the Order shell
+        JwtUserDetails user = getCurrentUser();
+
+        Long restaurantId = user.getRestaurantId();
+
+        log.info(
+                "Creating order for waiter: {} at table: {} for restaurantId: {}",
+                user.getUsername(),
+                request.getTableNumber(),
+                restaurantId
+        );
+
         Order order = Order.builder()
                 .orderNumber(orderNumberGenerator.generate())
                 .tableNumber(request.getTableNumber())
-                .waiterId(waiter.getUserId())
-                .waiterEmail(waiter.getUsername())
+                .waiterId(user.getUserId())
+                .waiterEmail(user.getUsername())
+                .restaurantId(restaurantId)
                 .status(OrderStatus.PENDING)
                 .totalAmount(BigDecimal.ZERO)
                 .build();
 
-        // Resolve and validate items (merges duplicates)
-        List<OrderItem> resolvedItems = resolveAndValidateItems(request.getItems(), order);
+        List<OrderItem> resolvedItems =
+                resolveAndValidateItems(
+                        request.getItems(),
+                        order
+                );
+
         resolvedItems.forEach(order::addItem);
+
         order.recalculateTotal();
 
-        Order savedOrder = orderRepository.save(order);
-        log.info("Order created successfully: {}", savedOrder.getOrderNumber());
+        Order savedOrder =
+                orderRepository.save(order);
 
-        // Publish Kafka event (fire-and-forget; not part of transaction)
+        log.info(
+                "Order created successfully: {} for restaurantId: {}",
+                savedOrder.getOrderNumber(),
+                restaurantId
+        );
+
         orderProducer.publishOrderCreated(savedOrder);
 
         return orderMapper.toOrderResponse(savedOrder);
     }
 
-    // ─── Update Order ──────────────────────────────────────────────────────────
 
-    @Override
+    // ============================================================
+    // UPDATE ORDER
+    // ============================================================
+
     @Transactional
-    public OrderResponse updateOrder(Long orderId, UpdateOrderRequest request, JwtUserDetails waiter) {
-        log.info("Updating order id: {} by waiter: {}", orderId, waiter.getUsername());
+    @Override
+    public OrderResponse updateOrder(
+            Long orderId,
+            UpdateOrderRequest request
+    ) {
 
-        Order order = findOrderById(orderId);
+        JwtUserDetails user = getCurrentUser();
 
-        // Clear existing items; they are orphaned and deleted by JPA
+        Long restaurantId = user.getRestaurantId();
+
+        log.info(
+                "Updating order id: {} by user: {} for restaurantId: {}",
+                orderId,
+                user.getUsername(),
+                restaurantId
+        );
+
+        Order order =
+                findOrderById(
+                        orderId,
+                        restaurantId
+                );
+
         order.getItems().clear();
 
-        // Resolve new item list (also handles merging duplicates)
-        List<OrderItem> resolvedItems = resolveAndValidateItems(request.getItems(), order);
+        List<OrderItem> resolvedItems =
+                resolveAndValidateItems(
+                        request.getItems(),
+                        order
+                );
+
         resolvedItems.forEach(order::addItem);
+
         order.recalculateTotal();
 
-        Order savedOrder = orderRepository.save(order);
-        log.info("Order updated successfully: {}", savedOrder.getOrderNumber());
+        Order savedOrder =
+                orderRepository.save(order);
 
         orderProducer.publishOrderUpdated(savedOrder);
 
         return orderMapper.toOrderResponse(savedOrder);
     }
 
-    // ─── Cancel Order ──────────────────────────────────────────────────────────
 
-    @Override
+    // ============================================================
+    // CANCEL ORDER
+    // ============================================================
+
     @Transactional
-    public void cancelOrder(Long orderId, JwtUserDetails waiter) {
-        log.info("Cancelling order id: {} by waiter: {}", orderId, waiter.getUsername());
+    @Override
+    public void cancelOrder(Long orderId) {
 
-        Order order = findOrderById(orderId);
+        JwtUserDetails user = getCurrentUser();
+
+        Long restaurantId = user.getRestaurantId();
+
+        log.info(
+                "Cancelling order id: {} by user: {} for restaurantId: {}",
+                orderId,
+                user.getUsername(),
+                restaurantId
+        );
+
+        Order order =
+                findOrderById(
+                        orderId,
+                        restaurantId
+                );
 
         if (order.getStatus() == OrderStatus.SERVED) {
+
             throw new OrderCancellationException(
-                    "Cannot cancel order [" + order.getOrderNumber() + "]. Order has already been served.");
+                    "Cannot cancel order ["
+                            + order.getOrderNumber()
+                            + "]. Order has already been served."
+            );
         }
 
         if (order.getStatus() == OrderStatus.CANCELLED) {
+
             throw new OrderCancellationException(
-                    "Order [" + order.getOrderNumber() + "] is already cancelled.");
+                    "Order ["
+                            + order.getOrderNumber()
+                            + "] is already cancelled."
+            );
         }
 
         order.setStatus(OrderStatus.CANCELLED);
-        Order savedOrder = orderRepository.save(order);
-        log.info("Order cancelled successfully: {}", savedOrder.getOrderNumber());
+
+        Order savedOrder =
+                orderRepository.save(order);
+
+        log.info(
+                "Order cancelled successfully: {} for restaurantId: {}",
+                savedOrder.getOrderNumber(),
+                restaurantId
+        );
 
         orderProducer.publishOrderCancelled(savedOrder);
     }
 
-    // ─── Read Operations ───────────────────────────────────────────────────────
 
-    @Override
+    // ============================================================
+    // GET ORDER BY ID
+    // ============================================================
+
     @Transactional(readOnly = true)
+    @Override
     public OrderResponse getOrderById(Long orderId) {
-        return orderMapper.toOrderResponse(findOrderById(orderId));
+
+        Long restaurantId =
+                getCurrentUser().getRestaurantId();
+
+        Order order =
+                findOrderById(
+                        orderId,
+                        restaurantId
+                );
+
+        return orderMapper.toOrderResponse(order);
     }
 
-    @Override
+
+    // ============================================================
+    // GET ALL ORDERS
+    // ============================================================
+
     @Transactional(readOnly = true)
+    @Override
     public List<OrderResponse> getAllOrders() {
-        return orderMapper.toOrderResponseList(orderRepository.findAll());
+
+        Long restaurantId =
+                getCurrentUser().getRestaurantId();
+
+        return orderMapper.toOrderResponseList(
+                orderRepository.findAllByRestaurantId(
+                        restaurantId
+                )
+        );
     }
 
-    @Override
+
+    // ============================================================
+    // GET ORDERS BY STATUS
+    // ============================================================
+
     @Transactional(readOnly = true)
-    public List<OrderResponse> getOrdersByStatus(OrderStatus status) {
-        return orderMapper.toOrderResponseList(orderRepository.findByStatus(status));
-    }
-
     @Override
+    public List<OrderResponse> getOrdersByStatus(
+            OrderStatus status
+    ) {
+
+        Long restaurantId =
+                getCurrentUser().getRestaurantId();
+
+        return orderMapper.toOrderResponseList(
+                orderRepository.findByStatusAndRestaurantId(
+                        status,
+                        restaurantId
+                )
+        );
+    }
+
+
+    // ============================================================
+    // GET ORDERS BY TABLE NUMBER
+    // ============================================================
+
     @Transactional(readOnly = true)
-    public List<OrderResponse> getOrdersByTableNumber(Integer tableNumber) {
-        return orderMapper.toOrderResponseList(orderRepository.findByTableNumber(tableNumber));
+    @Override
+    public List<OrderResponse> getOrdersByTableNumber(
+            Integer tableNumber
+    ) {
+
+        Long restaurantId =
+                getCurrentUser().getRestaurantId();
+
+        return orderMapper.toOrderResponseList(
+                orderRepository.findByTableNumberAndRestaurantId(
+                        tableNumber,
+                        restaurantId
+                )
+        );
     }
 
-    // ─── Internal Helpers ──────────────────────────────────────────────────────
 
-    private Order findOrderById(Long orderId) {
-        return orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException(orderId));
+    // ============================================================
+    // FIND ORDER BY ID
+    // ============================================================
+
+    private Order findOrderById(
+            Long orderId,
+            Long restaurantId
+    ) {
+
+        return orderRepository
+                .findByIdAndRestaurantId(
+                        orderId,
+                        restaurantId
+                )
+                .orElseThrow(
+                        () -> new OrderNotFoundException(orderId)
+                );
     }
 
-    /**
-     * Resolves a list of OrderItemRequests into validated OrderItem entities.
-     * <p>
-     * Business rules applied:
-     * 1. Merge duplicate menu item IDs by summing quantities.
-     * 2. Fetch each menu item from the Menu Service.
-     * 3. Validate stock availability.
-     * 4. Compute subtotal from backend price (never from request).
-     */
-    private List<OrderItem> resolveAndValidateItems(List<OrderItemRequest> itemRequests, Order order) {
-        // Step 1: Merge duplicates
-        Map<Long, Integer> mergedQuantities = itemRequests.stream()
-                .collect(Collectors.toMap(
-                        OrderItemRequest::getMenuItemId,
-                        OrderItemRequest::getQuantity,
-                        Integer::sum
-                ));
 
-        List<OrderItem> resolvedItems = new ArrayList<>();
+    // ============================================================
+    // RESOLVE AND VALIDATE ITEMS
+    // ============================================================
 
-        for (Map.Entry<Long, Integer> entry : mergedQuantities.entrySet()) {
+    private List<OrderItem> resolveAndValidateItems(
+            List<OrderItemRequest> itemRequests,
+            Order order
+    ) {
+
+        Long restaurantId = order.getRestaurantId();
+
+        Map<Long, Integer> mergedQuantities =
+                itemRequests.stream()
+                        .collect(Collectors.toMap(
+                                OrderItemRequest::getMenuItemId,
+                                OrderItemRequest::getQuantity,
+                                Integer::sum
+                        ));
+
+        List<OrderItem> resolvedItems =
+                new ArrayList<>();
+
+        for (Map.Entry<Long, Integer> entry
+                : mergedQuantities.entrySet()) {
+
             Long menuItemId = entry.getKey();
+
             Integer requestedQty = entry.getValue();
 
-            // Step 2: Fetch from Menu Service
-            MenuItemResponse menuItem = fetchMenuItemOrThrow(menuItemId);
+            MenuItemResponse menuItem =
+                    fetchMenuItemOrThrow(menuItemId);
 
-            // Step 3: Stock validation
-            if (menuItem.getAvailableStock() < requestedQty) {
-                throw new OutOfStockException(
-                        menuItem.getName(), requestedQty, menuItem.getAvailableStock());
+            if (!menuItem.getRestaurantId().equals(restaurantId)) {
+
+                throw new MenuItemNotFoundException(
+                        menuItemId
+                );
             }
 
-            // Step 4: Build item with backend price
-            BigDecimal subtotal = menuItem.getPrice()
-                    .multiply(BigDecimal.valueOf(requestedQty));
+            if (menuItem.getAvailableStock() < requestedQty) {
 
-            OrderItem item = OrderItem.builder()
-                    .menuItemId(menuItem.getId())
-                    .menuItemName(menuItem.getName())
-                    .quantity(requestedQty)
-                    .pricePerUnit(menuItem.getPrice())
-                    .subtotal(subtotal)
-                    .build();
+                throw new OutOfStockException(
+                        menuItem.getName(),
+                        requestedQty,
+                        menuItem.getAvailableStock()
+                );
+            }
+
+            BigDecimal subtotal =
+                    menuItem.getPrice()
+                            .multiply(
+                                    BigDecimal.valueOf(
+                                            requestedQty
+                                    )
+                            );
+
+            OrderItem item =
+                    OrderItem.builder()
+                            .menuItemId(menuItem.getId())
+                            .menuItemName(menuItem.getName())
+                            .quantity(requestedQty)
+                            .pricePerUnit(menuItem.getPrice())
+                            .subtotal(subtotal)
+                            .build();
 
             resolvedItems.add(item);
         }
@@ -209,19 +398,72 @@ public class OrderServiceImpl implements OrderService {
         return resolvedItems;
     }
 
-    private MenuItemResponse fetchMenuItemOrThrow(Long menuItemId) {
+
+    // ============================================================
+    // FETCH MENU ITEM
+    // ============================================================
+
+    private MenuItemResponse fetchMenuItemOrThrow(
+            Long menuItemId
+    ) {
+
         try {
-            MenuItemResponse menuItem = menuClient.getMenuItemById(menuItemId);
+
+            MenuItemResponse menuItem =
+                    menuClient.getMenuItemById(
+                            menuItemId
+                    );
+
             if (menuItem == null) {
-                throw new MenuItemNotFoundException(menuItemId);
+
+                log.warn(
+                        "Menu item returned null from client for id: {}",
+                        menuItemId
+                );
+
+                throw new MenuItemNotFoundException(
+                        menuItemId
+                );
             }
+
+            if (menuItem.getRestaurantId() == null) {
+
+                log.error(
+                        "Menu item {} has null restaurantId",
+                        menuItemId
+                );
+
+                throw new MenuItemNotFoundException(
+                        menuItemId
+                );
+            }
+
             return menuItem;
+
         } catch (FeignException.NotFound e) {
-            log.warn("Menu item not found via Feign for id: {}", menuItemId);
-            throw new MenuItemNotFoundException(menuItemId);
+
+            log.warn(
+                    "Menu item not found via Feign for id: {}",
+                    menuItemId
+            );
+
+            throw new MenuItemNotFoundException(
+                    menuItemId
+            );
+
         } catch (FeignException e) {
-            log.error("Feign error fetching menu item {}: {}", menuItemId, e.getMessage());
-            throw new RuntimeException("Failed to communicate with Menu Service: " + e.getMessage());
+
+            log.error(
+                    "Feign error fetching menu item {}: {}",
+                    menuItemId,
+                    e.getMessage()
+            );
+
+            throw new RuntimeException(
+                    "Failed to communicate with Menu Service: "
+                            + e.getMessage()
+            );
         }
     }
 }
+
