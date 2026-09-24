@@ -52,8 +52,7 @@ public class MenuItemController {
                                 "Menu item created successfully",
 
                                 menuItemService.createMenuItem(
-                                        request,
-                                        token
+                                        request
                                 )
                         )
                 );
@@ -86,8 +85,7 @@ public class MenuItemController {
 
                         menuItemService.updateMenuItem(
                                 id,
-                                request,
-                                token
+                                request
                         )
                 )
         );
@@ -113,8 +111,7 @@ public class MenuItemController {
         );
 
         menuItemService.deleteMenuItem(
-                id,
-                token
+                id
         );
 
         return ResponseEntity.ok("Menu item deleted successfully");
@@ -148,8 +145,7 @@ public class MenuItemController {
 
                         menuItemService.updateAvailability(
                                 id,
-                                request,
-                                token
+                                request
                         )
                 )
         );
@@ -175,8 +171,7 @@ public class MenuItemController {
 
         return ResponseEntity.ok(
                 menuItemService.getMenuItemSummaryById(
-                        id,
-                        token
+                        id
                 )
         );
     }
@@ -204,8 +199,7 @@ public class MenuItemController {
                         "Menu item retrieved",
 
                         menuItemService.getMenuItemById(
-                                id,
-                                token
+                                id
                         )
                 )
         );
@@ -230,9 +224,7 @@ public class MenuItemController {
                 ApiResponse.success(
                         "All menu items retrieved",
 
-                        menuItemService.getAllMenuItems(
-                                token
-                        )
+                        menuItemService.getAllMenuItems()
                 )
         );
     }
@@ -256,9 +248,7 @@ public class MenuItemController {
                 ApiResponse.success(
                         "Available menu items retrieved",
 
-                        menuItemService.getAvailableMenuItems(
-                                token
-                        )
+                        menuItemService.getAvailableMenuItems()
                 )
         );
     }
@@ -286,8 +276,7 @@ public class MenuItemController {
                         "Menu items by category retrieved",
 
                         menuItemService.getMenuItemsByCategory(
-                                category,
-                                token
+                                category
                         )
                 )
         );
@@ -316,10 +305,7 @@ public class MenuItemController {
                 ApiResponse.success(
                         "Search results",
 
-                        menuItemService.searchMenuItemsByName(
-                                keyword,
-                                token
-                        )
+                        menuItemService.searchMenuItemsByName(keyword)
                 )
         );
     }

@@ -6,58 +6,48 @@ import com.restaurant.menuservice.dto.request.UpdateMenuItemRequest;
 import com.restaurant.menuservice.dto.response.MenuItemResponse;
 import com.restaurant.menuservice.dto.response.MenuItemSummaryResponse;
 import com.restaurant.menuservice.enums.MenuCategory;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface MenuItemService {
 
+
+
     MenuItemResponse createMenuItem(
-            CreateMenuItemRequest request,
-            String token
+            CreateMenuItemRequest request
     );
+
 
     MenuItemResponse updateMenuItem(
             Long id,
-            UpdateMenuItemRequest request,
-            String token
+            UpdateMenuItemRequest request
     );
 
-    void deleteMenuItem(
-            Long id,
-            String token
-    );
+
+    void deleteMenuItem(Long id);
+
 
     MenuItemResponse updateAvailability(
             Long id,
-            AvailabilityRequest request,
-            String token
+            AvailabilityRequest request
     );
 
-    MenuItemResponse getMenuItemById(
-            Long id,
-            String token
-    );
 
-    MenuItemSummaryResponse getMenuItemSummaryById(
-            Long id,
-            String token
-    );
+    MenuItemResponse getMenuItemById(Long id);
 
-    List<MenuItemResponse> getAllMenuItems(
-            String token
-    );
+    MenuItemSummaryResponse getMenuItemSummaryById(Long id);
+
+    List<MenuItemResponse> getAllMenuItems();
 
     List<MenuItemResponse> getMenuItemsByCategory(
-            MenuCategory category,
-            String token
+            MenuCategory category
     );
 
-    List<MenuItemResponse> getAvailableMenuItems(
-            String token
-    );
+
+    List<MenuItemResponse> getAvailableMenuItems();
 
     List<MenuItemResponse> searchMenuItemsByName(
-            String keyword,
-            String token
+            String keyword
     );
 }

@@ -10,11 +10,13 @@ import com.restaurant.menuservice.enums.MenuCategory;
 import com.restaurant.menuservice.exception.MenuAlreadyExistsException;
 import com.restaurant.menuservice.exception.MenuItemNotFoundException;
 import com.restaurant.menuservice.repository.MenuItemRepository;
-import com.restaurant.menuservice.security.JwtUtil;
+import com.restaurant.menuservice.security.JwtUserDetails;
 import com.restaurant.menuservice.service.MenuItemMapper;
 import com.restaurant.menuservice.service.MenuItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -28,7 +30,21 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
     private final MenuItemMapper menuItemMapper;
-    private final JwtUtil jwtUtil;
+
+
+    // ============================================================
+    // GET CURRENT USER
+    // ============================================================
+
+    private JwtUserDetails getCurrentUser() {
+
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+        return (JwtUserDetails) authentication.getPrincipal();
+    }
 
 
     // ============================================================
@@ -38,11 +54,10 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Transactional
     @Override
     public MenuItemResponse createMenuItem(
-            CreateMenuItemRequest request,
-            String token
+            CreateMenuItemRequest request
     ) {
 
-        Long restaurantId = jwtUtil.extractRestaurantId(token);
+        Long restaurantId = getCurrentUser().getRestaurantId();
 
         log.info(
                 "Creating menu item: {} for restaurantId: {}",
@@ -92,11 +107,10 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public MenuItemResponse updateMenuItem(
             Long id,
-            UpdateMenuItemRequest request,
-            String token
+            UpdateMenuItemRequest request
     ) {
 
-        Long restaurantId = jwtUtil.extractRestaurantId(token);
+        Long restaurantId = getCurrentUser().getRestaurantId();
 
         log.info(
                 "Updating menu item id: {} for restaurantId: {}",
@@ -104,7 +118,8 @@ public class MenuItemServiceImpl implements MenuItemService {
                 restaurantId
         );
 
-        MenuItem item = findByIdAndRestaurantId(id, restaurantId);
+        MenuItem item =
+                findByIdAndRestaurantId(id, restaurantId);
 
         if (StringUtils.hasText(request.getName())) {
 
@@ -112,10 +127,11 @@ public class MenuItemServiceImpl implements MenuItemService {
 
             // Check duplicate only when name is actually changing
             if (!newName.equalsIgnoreCase(item.getName())
-                    && menuItemRepository.existsByNameIgnoreCaseAndRestaurantId(
-                    newName,
-                    restaurantId
-            )) {
+                    && menuItemRepository
+                    .existsByNameIgnoreCaseAndRestaurantId(
+                            newName,
+                            restaurantId
+                    )) {
 
                 throw new MenuAlreadyExistsException(newName);
             }
@@ -143,7 +159,6 @@ public class MenuItemServiceImpl implements MenuItemService {
             item.setImageUrl(request.getImageUrl());
         }
 
-
         MenuItem saved = menuItemRepository.save(item);
 
         log.info(
@@ -162,12 +177,9 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Transactional
     @Override
-    public void deleteMenuItem(
-            Long id,
-            String token
-    ) {
+    public void deleteMenuItem(Long id) {
 
-        Long restaurantId = jwtUtil.extractRestaurantId(token);
+        Long restaurantId = getCurrentUser().getRestaurantId();
 
         log.info(
                 "Deleting menu item id: {} for restaurantId: {}",
@@ -176,7 +188,8 @@ public class MenuItemServiceImpl implements MenuItemService {
         );
 
         // Only delete if menu item belongs to this restaurant
-        MenuItem item = findByIdAndRestaurantId(id, restaurantId);
+        MenuItem item =
+                findByIdAndRestaurantId(id, restaurantId);
 
         menuItemRepository.delete(item);
 
@@ -196,11 +209,10 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public MenuItemResponse updateAvailability(
             Long id,
-            AvailabilityRequest request,
-            String token
+            AvailabilityRequest request
     ) {
 
-        Long restaurantId = jwtUtil.extractRestaurantId(token);
+        Long restaurantId = getCurrentUser().getRestaurantId();
 
         log.info(
                 "Updating availability for menu item id: {} for restaurantId: {} → {}",
@@ -209,8 +221,8 @@ public class MenuItemServiceImpl implements MenuItemService {
                 request.getAvailable()
         );
 
-        // Check restaurant ownership
-        MenuItem item = findByIdAndRestaurantId(id, restaurantId);
+        MenuItem item =
+                findByIdAndRestaurantId(id, restaurantId);
 
         item.setAvailable(request.getAvailable());
 
@@ -226,14 +238,12 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Transactional(readOnly = true)
     @Override
-    public MenuItemResponse getMenuItemById(
-            Long id,
-            String token
-    ) {
+    public MenuItemResponse getMenuItemById(Long id) {
 
-        Long restaurantId = jwtUtil.extractRestaurantId(token);
+        Long restaurantId = getCurrentUser().getRestaurantId();
 
-        MenuItem item = findByIdAndRestaurantId(id, restaurantId);
+        MenuItem item =
+                findByIdAndRestaurantId(id, restaurantId);
 
         return menuItemMapper.toMenuItemResponse(item);
     }
@@ -245,14 +255,12 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Transactional(readOnly = true)
     @Override
-    public MenuItemSummaryResponse getMenuItemSummaryById(
-            Long id,
-            String token
-    ) {
+    public MenuItemSummaryResponse getMenuItemSummaryById(Long id) {
 
-        Long restaurantId = jwtUtil.extractRestaurantId(token);
+        Long restaurantId = getCurrentUser().getRestaurantId();
 
-        MenuItem item = findByIdAndRestaurantId(id, restaurantId);
+        MenuItem item =
+                findByIdAndRestaurantId(id, restaurantId);
 
         return menuItemMapper.toMenuItemSummaryResponse(item);
     }
@@ -264,11 +272,9 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<MenuItemResponse> getAllMenuItems(
-            String token
-    ) {
+    public List<MenuItemResponse> getAllMenuItems() {
 
-        Long restaurantId = jwtUtil.extractRestaurantId(token);
+        Long restaurantId = getCurrentUser().getRestaurantId();
 
         return menuItemMapper.toMenuItemResponseList(
                 menuItemRepository.findAllByRestaurantId(restaurantId)
@@ -283,11 +289,10 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Transactional(readOnly = true)
     @Override
     public List<MenuItemResponse> getMenuItemsByCategory(
-            MenuCategory category,
-            String token
+            MenuCategory category
     ) {
 
-        Long restaurantId = jwtUtil.extractRestaurantId(token);
+        Long restaurantId = getCurrentUser().getRestaurantId();
 
         return menuItemMapper.toMenuItemResponseList(
                 menuItemRepository.findByCategoryAndRestaurantId(
@@ -304,16 +309,15 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<MenuItemResponse> getAvailableMenuItems(
-            String token
-    ) {
+    public List<MenuItemResponse> getAvailableMenuItems() {
 
-        Long restaurantId = jwtUtil.extractRestaurantId(token);
+        Long restaurantId = getCurrentUser().getRestaurantId();
 
         return menuItemMapper.toMenuItemResponseList(
-                menuItemRepository.findAllAvailableOrderByCategoryAndName(
-                        restaurantId
-                )
+                menuItemRepository
+                        .findAllAvailableOrderByCategoryAndName(
+                                restaurantId
+                        )
         );
     }
 
@@ -325,16 +329,17 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Transactional(readOnly = true)
     @Override
     public List<MenuItemResponse> searchMenuItemsByName(
-            String keyword,
-            String token
+            String keyword
     ) {
 
-        Long restaurantId = jwtUtil.extractRestaurantId(token);
+        Long restaurantId = getCurrentUser().getRestaurantId();
 
         if (!StringUtils.hasText(keyword)) {
 
             return menuItemMapper.toMenuItemResponseList(
-                    menuItemRepository.findAllByRestaurantId(restaurantId)
+                    menuItemRepository.findAllByRestaurantId(
+                            restaurantId
+                    )
             );
         }
 
@@ -363,3 +368,4 @@ public class MenuItemServiceImpl implements MenuItemService {
                 );
     }
 }
+

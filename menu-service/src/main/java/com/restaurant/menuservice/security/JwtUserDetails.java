@@ -16,6 +16,7 @@ public class JwtUserDetails implements UserDetails {
     private final Long userId;
     private final String username;
     private final String role;
+    private final Long restaurantId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -28,5 +29,6 @@ public class JwtUserDetails implements UserDetails {
     @Override public boolean isAccountNonExpired()         { return true; }
     @Override public boolean isAccountNonLocked()          { return true; }
     @Override public boolean isCredentialsNonExpired()     { return true; }
-    @Override public boolean isEnabled()                   { return true; }
+    @Override public boolean isEnabled() { return true; }
+    public Long getRestaurantId()                          { return restaurantId;}
 }
