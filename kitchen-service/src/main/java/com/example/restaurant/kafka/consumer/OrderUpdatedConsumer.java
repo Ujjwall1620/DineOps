@@ -1,0 +1,4 @@
+package com.example.restaurant.kafka.consumer;
+
+public class OrderUpdatedConsumer {
+}

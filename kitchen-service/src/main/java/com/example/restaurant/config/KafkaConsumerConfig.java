@@ -1,6 +1,8 @@
-package com.restaurant.kitchenservice.config;
+package com.example.restaurant.config;
 
-import com.restaurant.kitchenservice.kafka.consumer.OrderCreatedEvent;
+import com.example.restaurant.kafka.consumer.OrderCreatedEvent;
+import com.example.restaurant.kafka.consumer.OrderUpdatedEvent;
+import com.example.restaurant.kafka.consumer.OrderCancelledEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,35 +26,83 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
 
-    @Bean
-    public ConsumerFactory<String, OrderCreatedEvent> orderCreatedConsumerFactory() {
-        JsonDeserializer<OrderCreatedEvent> deserializer =
-                new JsonDeserializer<>(OrderCreatedEvent.class, false);
-        deserializer.addTrustedPackages("*");
-
+    // ─── Common props builder — teeno consumer factories yehi base use karte hain ──
+    private Map<String, Object> baseProps() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        return props;
+    }
 
-        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), deserializer);
+    // ─── order-created (existing) ──────────────────────────────────────────────
+    @Bean
+    public ConsumerFactory<String, OrderCreatedEvent> orderCreatedConsumerFactory() {
+        JsonDeserializer<OrderCreatedEvent> deserializer =
+                new JsonDeserializer<>(OrderCreatedEvent.class, false);
+        deserializer.addTrustedPackages("com.example.restaurant.kafka.consumer");
+        return new DefaultKafkaConsumerFactory<>(baseProps(), new StringDeserializer(), deserializer);
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, OrderCreatedEvent>
-            kafkaListenerContainerFactory() {
-
+    public ConcurrentKafkaListenerContainerFactory<String, OrderCreatedEvent> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, OrderCreatedEvent> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-
         factory.setConsumerFactory(orderCreatedConsumerFactory());
-        // Manual immediate acknowledgment — offset committed only after successful processing
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
-        // 3 concurrent partitions
         factory.setConcurrency(3);
+        return factory;
+    }
 
+    // ─── order-updated (NEW) ────────────────────────────────────────────────────
+    @Bean
+    public ConsumerFactory<String, OrderUpdatedEvent> orderUpdatedConsumerFactory() {
+        JsonDeserializer<OrderUpdatedEvent> deserializer =
+                new JsonDeserializer<>(OrderUpdatedEvent.class, false);
+        deserializer.addTrustedPackages("com.example.restaurant.kafka.consumer");
+        return new DefaultKafkaConsumerFactory<>(baseProps(), new StringDeserializer(), deserializer);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, OrderUpdatedEvent> orderUpdatedListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, OrderUpdatedEvent> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(orderUpdatedConsumerFactory());
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+        factory.setConcurrency(3);
+        return factory;
+    }
+
+    // ─── order-cancelled (NEW) ──────────────────────────────────────────────────
+    @Bean
+    public ConsumerFactory<String, OrderCancelledEvent> orderCancelledConsumerFactory() {
+        JsonDeserializer<OrderCancelledEvent> deserializer =
+                new JsonDeserializer<>(OrderCancelledEvent.class, false);
+        deserializer.addTrustedPackages("com.example.restaurant.kafka.consumer");
+        return new DefaultKafkaConsumerFactory<>(baseProps(), new StringDeserializer(), deserializer);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, OrderCancelledEvent> orderCancelledListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, OrderCancelledEvent> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(orderCancelledConsumerFactory());
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+        factory.setConcurrency(3);
+        return factory;
+    }
+
+    // ─── order-created batch listener (NEW) ─────────────────────────────────────
+    @Bean("batchKafkaListenerContainerFactory")
+    public ConcurrentKafkaListenerContainerFactory<String, OrderCreatedEvent> batchKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, OrderCreatedEvent> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(orderCreatedConsumerFactory());
+        factory.setBatchListener(true);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+        factory.setConcurrency(3);
         return factory;
     }
 }
