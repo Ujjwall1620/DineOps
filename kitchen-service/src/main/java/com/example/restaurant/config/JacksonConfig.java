@@ -1,4 +1,4 @@
-package com.restaurant.kitchenservice.config;
+package com.example.restaurant.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

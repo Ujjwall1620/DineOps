@@ -1,4 +1,4 @@
-package com.restaurant.orderservice.security;
+package com.example.restaurant.Security;
 
 import lombok.Builder;
 import lombok.Getter;

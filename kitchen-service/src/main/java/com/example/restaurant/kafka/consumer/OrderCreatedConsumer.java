@@ -1,9 +1,9 @@
-package com.restaurant.kitchenservice.kafka.consumer;
+package com.example.restaurant.kafka.consumer;
 
-import com.restaurant.kitchenservice.entity.KitchenItem;
-import com.restaurant.kitchenservice.entity.KitchenTicket;
-import com.restaurant.kitchenservice.enums.KitchenStatus;
-import com.restaurant.kitchenservice.repository.KitchenTicketRepository;
+import com.example.restaurant.entity.KitchenItem;
+import com.example.restaurant.entity.KitchenTicket;
+import com.example.restaurant.enums.KitchenStatus;
+import com.example.restaurant.repository.KitchenTicketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -12,7 +12,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -22,68 +22,64 @@ public class OrderCreatedConsumer {
 
     private final KitchenTicketRepository ticketRepository;
 
-    /**
-     * Consumes {@code order-created} events published by Order Service.
-     *
-     * <p>Idempotency guard: if a ticket already exists for this orderId
-     * (duplicate delivery / retry), the event is silently acknowledged and skipped.
-     *
-     * <p>Manual acknowledgment (MANUAL_IMMEDIATE) ensures the offset is committed
-     * only after the ticket is successfully persisted.
-     */
     @KafkaListener(
-            topics  = "${kafka.topic.order-created}",
+            topics = "${kafka.topic.order-created}",
             groupId = "${spring.kafka.consumer.group-id}",
-            containerFactory = "kafkaListenerContainerFactory"
-    )
+            containerFactory = "kafkaListenerContainerFactory")
     @Transactional
-    public void consumeOrderCreated(@Payload OrderCreatedEvent event,
-                                    Acknowledgment acknowledgment) {
+    public void consumeBatch(@Payload List<OrderCreatedEvent> events, Acknowledgment acknowledgment) {
 
-        log.info("Received order-created event for orderId: {}, orderNumber: {}",
-                event.getOrderId(), event.getOrderNumber());
+        log.info("Processing batch of {} order-created events", events.size());
 
-        // ── Idempotency guard ────────────────────────────────────────────────
-        if (ticketRepository.existsByOrderId(event.getOrderId())) {
-            log.warn("Duplicate order-created event for orderId: {}. Skipping.", event.getOrderId());
-            acknowledgment.acknowledge();
-            return;
+        // Step 1: restaurantId ke hisaab se group karo (multi-tenant safe bulk-check ke liye)
+        Map<Long, List<OrderCreatedEvent>> eventsByRestaurant = events.stream()
+                .collect(Collectors.groupingBy(OrderCreatedEvent::getRestaurantId));
+
+        Set<String> existingKeys = new HashSet<>();
+        for (Map.Entry<Long, List<OrderCreatedEvent>> entry : eventsByRestaurant.entrySet()) {
+            Long restaurantId = entry.getKey();
+            List<Long> orderIds = entry.getValue().stream()
+                    .map(OrderCreatedEvent::getOrderId)
+                    .toList();
+
+            // Ek hi query — us restaurant ke saare relevant orderIds check ho jaate hain
+            ticketRepository.findByRestaurantIdAndOrderIdIn(restaurantId, orderIds)
+                    .forEach(t -> existingKeys.add(t.getRestaurantId() + "-" + t.getOrderId()));
         }
 
-        try {
-            KitchenTicket ticket = KitchenTicket.builder()
-                    .orderId(event.getOrderId())
-                    .orderNumber(event.getOrderNumber())
-                    .tableNumber(event.getTableNumber())
-                    .status(KitchenStatus.PENDING)
-                    .build();
+        // Step 2: sirf naye (non-duplicate) events ke liye ticket banao
+        List<KitchenTicket> newTickets = events.stream()
+                .filter(e -> !existingKeys.contains(e.getRestaurantId() + "-" + e.getOrderId()))
+                .map(this::toTicket)
+                .toList();
 
-            // Map order items → kitchen items
-            if (event.getItems() != null) {
-                List<KitchenItem> kitchenItems = event.getItems().stream()
-                        .map(payload -> KitchenItem.builder()
-                                .menuItemId(payload.getMenuItemId())
-                                .menuItemName(payload.getMenuItemName())
-                                .quantity(payload.getQuantity())
-                                .build())
-                        .collect(Collectors.toList());
-
-                kitchenItems.forEach(ticket::addItem);
-            }
-
-            ticketRepository.save(ticket);
-
-            log.info("Kitchen ticket created with id: {} for orderId: {}",
-                    ticket.getId(), event.getOrderId());
-
-            // Commit offset only after successful DB write
-            acknowledgment.acknowledge();
-
-        } catch (Exception ex) {
-            log.error("Failed to create kitchen ticket for orderId: {}. Error: {}",
-                    event.getOrderId(), ex.getMessage(), ex);
-            // Do NOT acknowledge — Kafka will redeliver (up to retry policy)
-            throw ex;
+        if (newTickets.isEmpty()) {
+            log.info("All {} events were duplicates, nothing to insert", events.size());
+        } else {
+            ticketRepository.saveAll(newTickets); // ek hi batch insert
+            log.info("Inserted {} new kitchen tickets", newTickets.size());
         }
+
+        acknowledgment.acknowledge();
+    }
+
+    private KitchenTicket toTicket(OrderCreatedEvent event) {
+        KitchenTicket ticket = KitchenTicket.builder()
+                .restaurantId(event.getRestaurantId())   // ✅ FIX: ye pehle missing tha
+                .orderId(event.getOrderId())
+                .orderNumber(event.getOrderNumber())
+                .tableNumber(event.getTableNumber())
+                .status(KitchenStatus.PENDING)
+                .build();
+
+        if (event.getItems() != null) {
+            event.getItems().forEach(payload ->
+                    ticket.addItem(KitchenItem.builder()
+                            .menuItemId(payload.getMenuItemId())
+                            .menuItemName(payload.getMenuItemName())
+                            .quantity(payload.getQuantity())
+                            .build()));
+        }
+        return ticket;
     }
 }

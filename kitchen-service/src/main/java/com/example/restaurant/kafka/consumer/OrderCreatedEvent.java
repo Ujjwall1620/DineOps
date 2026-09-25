@@ -1,4 +1,4 @@
-package com.restaurant.kitchenservice.kafka.consumer;
+package com.example.restaurant.kafka.consumer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,10 +8,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Mirrors the OrderEvent published by Order Service on topic {@code order-created}.
- * Field names must match exactly for Jackson deserialization.
- */
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,6 +15,7 @@ import java.util.List;
 public class OrderCreatedEvent {
 
     private Long   orderId;
+    private Long   restaurantId;
     private String orderNumber;
     private Integer tableNumber;
     private Long   waiterId;

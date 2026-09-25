@@ -1,6 +1,6 @@
-package com.restaurant.kitchenservice.exception;
+package com.example.restaurant.exception;
 
-import com.restaurant.kitchenservice.dto.response.ApiResponse;
+import com.example.restaurant.dto.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

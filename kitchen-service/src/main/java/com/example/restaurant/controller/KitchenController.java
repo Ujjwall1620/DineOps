@@ -1,11 +1,11 @@
-package com.restaurant.kitchenservice.controller;
+package com.example.restaurant.controller;
 
-import com.restaurant.kitchenservice.dto.request.AssignChefRequest;
-import com.restaurant.kitchenservice.dto.response.ApiResponse;
-import com.restaurant.kitchenservice.dto.response.KitchenStatsResponse;
-import com.restaurant.kitchenservice.dto.response.KitchenTicketResponse;
-import com.restaurant.kitchenservice.enums.KitchenStatus;
-import com.restaurant.kitchenservice.service.KitchenService;
+import com.example.restaurant.dto.request.AssignChefRequest;
+import com.example.restaurant.dto.response.ApiResponse;
+import com.example.restaurant.dto.response.KitchenStatsResponse;
+import com.example.restaurant.dto.response.KitchenTicketResponse;
+import com.example.restaurant.enums.KitchenStatus;
+import com.example.restaurant.service.KitchenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

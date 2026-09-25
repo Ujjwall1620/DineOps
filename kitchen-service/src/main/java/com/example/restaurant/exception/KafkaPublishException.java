@@ -1,4 +1,4 @@
-package com.restaurant.kitchenservice.exception;
+package com.example.restaurant.exception;
 
 public class KafkaPublishException extends RuntimeException {
     public KafkaPublishException(String message) {

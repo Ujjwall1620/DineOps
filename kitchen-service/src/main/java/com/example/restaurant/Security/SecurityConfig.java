@@ -1,4 +1,4 @@
-package com.restaurant.orderservice.security;
+package com.example.restaurant.Security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -38,8 +38,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Allow actuator/health endpoints if added later
                 .requestMatchers("/actuator/**").permitAll()
-                // All order endpoints require authentication
-                .requestMatchers("/api/orders/**").authenticated()
+                // All kitchen endpoints require authentication
+                .requestMatchers("/api/kitchen/**").authenticated()
                 .anyRequest().authenticated()
             )
 

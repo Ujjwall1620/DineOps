@@ -1,13 +1,12 @@
-package com.restaurant.orderservice.security;
+package com.example.restaurant.Security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
@@ -23,11 +22,16 @@ public class JwtUtil {
      * Extract all claims from a JWT token.
      */
     public Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY.getBytes())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+            return Jwts.parser()
+                    .verifyWith(
+                            Keys.hmacShaKeyFor(
+                                    SECRET_KEY.getBytes(StandardCharsets.UTF_8)
+                            )
+                    )
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
     }
 
     /**
@@ -83,7 +87,7 @@ public class JwtUtil {
      */
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
+            Jwts.parser()
                     .setSigningKey(SECRET_KEY.getBytes())
                     .build()
                     .parseClaimsJws(token);

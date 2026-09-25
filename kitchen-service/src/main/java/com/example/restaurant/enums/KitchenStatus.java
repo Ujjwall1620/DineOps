@@ -1,4 +1,4 @@
-package com.restaurant.kitchenservice.enums;
+package com.example.restaurant.enums;
 
 public enum KitchenStatus {
 

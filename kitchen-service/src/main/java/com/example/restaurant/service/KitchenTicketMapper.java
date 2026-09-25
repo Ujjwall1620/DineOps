@@ -1,9 +1,9 @@
-package com.restaurant.kitchenservice.service;
+package com.example.restaurant.service;
 
-import com.restaurant.kitchenservice.dto.response.KitchenItemResponse;
-import com.restaurant.kitchenservice.dto.response.KitchenTicketResponse;
-import com.restaurant.kitchenservice.entity.KitchenItem;
-import com.restaurant.kitchenservice.entity.KitchenTicket;
+import com.example.restaurant.dto.response.KitchenItemResponse;
+import com.example.restaurant.dto.response.KitchenTicketResponse;
+import com.example.restaurant.entity.KitchenItem;
+import com.example.restaurant.entity.KitchenTicket;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

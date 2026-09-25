@@ -1,4 +1,4 @@
-package com.restaurant.kitchenservice.dto.response;
+package com.example.restaurant.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

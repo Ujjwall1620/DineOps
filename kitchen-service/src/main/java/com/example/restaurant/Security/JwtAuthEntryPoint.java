@@ -1,4 +1,4 @@
-package com.restaurant.orderservice.security;
+package com.example.restaurant.Security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

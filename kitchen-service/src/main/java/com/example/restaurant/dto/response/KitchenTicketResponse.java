@@ -1,6 +1,6 @@
-package com.restaurant.kitchenservice.dto.response;
+package com.example.restaurant.dto.response;
 
-import com.restaurant.kitchenservice.enums.KitchenStatus;
+import com.example.restaurant.enums.KitchenStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,9 +1,9 @@
-package com.restaurant.kitchenservice.service;
+package com.example.restaurant.service;
 
-import com.restaurant.kitchenservice.dto.request.AssignChefRequest;
-import com.restaurant.kitchenservice.dto.response.KitchenStatsResponse;
-import com.restaurant.kitchenservice.dto.response.KitchenTicketResponse;
-import com.restaurant.kitchenservice.enums.KitchenStatus;
+import com.example.restaurant.dto.request.AssignChefRequest;
+import com.example.restaurant.dto.response.KitchenStatsResponse;
+import com.example.restaurant.dto.response.KitchenTicketResponse;
+import com.example.restaurant.enums.KitchenStatus;
 
 import java.util.List;
 

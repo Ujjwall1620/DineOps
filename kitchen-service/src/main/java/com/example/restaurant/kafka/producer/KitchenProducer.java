@@ -1,7 +1,7 @@
-package com.restaurant.kitchenservice.kafka.producer;
+package com.example.restaurant.kafka.producer;
 
-import com.restaurant.kitchenservice.entity.KitchenTicket;
-import com.restaurant.kitchenservice.exception.KafkaPublishException;
+import com.example.restaurant.entity.KitchenTicket;
+import com.example.restaurant.exception.KafkaPublishException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor

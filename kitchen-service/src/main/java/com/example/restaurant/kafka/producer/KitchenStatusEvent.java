@@ -1,4 +1,4 @@
-package com.restaurant.kitchenservice.kafka.producer;
+package com.example.restaurant.kafka.producer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

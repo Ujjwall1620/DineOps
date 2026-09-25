@@ -1,4 +1,4 @@
-package com.restaurant.kitchenservice.exception;
+package com.example.restaurant.exception;
 
 public class KitchenTicketNotFoundException extends RuntimeException {
     public KitchenTicketNotFoundException(Long id) {

@@ -124,7 +124,8 @@ public class KitchenServiceImpl implements KitchenService {
     @Override
     @Transactional(readOnly = true)
     public KitchenTicketResponse getTicketByOrderId(Long orderId) {
-        KitchenTicket ticket = ticketRepository.findByOrderId(orderId)
+        Long restaurantId = getCurrentUser().getRestaurantId();
+        KitchenTicket ticket = ticketRepository.findByRestaurantIdAndOrderId(restaurantId, orderId)
                 .orElseThrow(() -> new KitchenTicketNotFoundException(
                         "Kitchen ticket not found for orderId: " + orderId));
         return mapper.toResponse(ticket);

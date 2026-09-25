@@ -1,6 +1,6 @@
-package com.restaurant.kitchenservice.config;
+package com.example.restaurant.config;
 
-import com.restaurant.kitchenservice.kafka.producer.KitchenStatusEvent;
+import com.example.restaurant.kafka.producer.KitchenStatusEvent;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
