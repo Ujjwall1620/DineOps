@@ -1,18 +1,21 @@
-package com.restaurant.kitchenservice.service.impl;
+package com.example.restaurant.service.impl;
 
-import com.restaurant.kitchenservice.dto.request.AssignChefRequest;
-import com.restaurant.kitchenservice.dto.response.KitchenStatsResponse;
-import com.restaurant.kitchenservice.dto.response.KitchenTicketResponse;
-import com.restaurant.kitchenservice.entity.KitchenTicket;
-import com.restaurant.kitchenservice.enums.KitchenStatus;
-import com.restaurant.kitchenservice.exception.InvalidStatusTransitionException;
-import com.restaurant.kitchenservice.exception.KitchenTicketNotFoundException;
-import com.restaurant.kitchenservice.kafka.producer.KitchenProducer;
-import com.restaurant.kitchenservice.repository.KitchenTicketRepository;
-import com.restaurant.kitchenservice.service.KitchenService;
-import com.restaurant.kitchenservice.service.KitchenTicketMapper;
+import com.example.restaurant.Security.JwtUserDetails;
+import com.example.restaurant.dto.request.AssignChefRequest;
+import com.example.restaurant.dto.response.KitchenStatsResponse;
+import com.example.restaurant.dto.response.KitchenTicketResponse;
+import com.example.restaurant.entity.KitchenTicket;
+import com.example.restaurant.enums.KitchenStatus;
+import com.example.restaurant.exception.InvalidStatusTransitionException;
+import com.example.restaurant.exception.KitchenTicketNotFoundException;
+import com.example.restaurant.kafka.producer.KitchenProducer;
+import com.example.restaurant.repository.KitchenTicketRepository;
+import com.example.restaurant.service.KitchenService;
+import com.example.restaurant.service.KitchenTicketMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +37,19 @@ public class KitchenServiceImpl implements KitchenService {
      * Valid transition: PENDING → IN_PREPARATION
      * Publishes ORDER_COOKING_STARTED event.
      */
+
+
+    private JwtUserDetails getCurrentUser() {
+
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+        return (JwtUserDetails) authentication.getPrincipal();
+    }
+
+
     @Override
     @Transactional
     public KitchenTicketResponse startPreparation(Long ticketId) {
@@ -117,22 +133,25 @@ public class KitchenServiceImpl implements KitchenService {
     @Override
     @Transactional(readOnly = true)
     public List<KitchenTicketResponse> getPendingTickets() {
+        Long restaurantId = getCurrentUser().getRestaurantId();
         return mapper.toResponseList(
-                ticketRepository.findByStatusOrderByCreatedAtAsc(KitchenStatus.PENDING));
+                ticketRepository.findByRestaurantIdAndStatusOrderByCreatedAtAsc(restaurantId, KitchenStatus.PENDING));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<KitchenTicketResponse> getTicketsByStatus(KitchenStatus status) {
+        Long restaurantId = getCurrentUser().getRestaurantId();
         return mapper.toResponseList(
-                ticketRepository.findByStatusOrderByCreatedAtAsc(status));
+                ticketRepository.findByRestaurantIdAndStatusOrderByCreatedAtAsc(restaurantId, status));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<KitchenTicketResponse> getActiveTickets() {
+        Long restaurantId = getCurrentUser().getRestaurantId();
         return mapper.toResponseList(
-                ticketRepository.findAllActiveOrderByCreatedAtAsc());
+                ticketRepository.findAllActiveOrderByCreatedAtAsc(restaurantId));
     }
 
     // ─── Dashboard ─────────────────────────────────────────────────────────────
@@ -140,11 +159,12 @@ public class KitchenServiceImpl implements KitchenService {
     @Override
     @Transactional(readOnly = true)
     public KitchenStatsResponse getStats() {
-        long pending     = ticketRepository.countByStatus(KitchenStatus.PENDING);
-        long preparing   = ticketRepository.countByStatus(KitchenStatus.IN_PREPARATION);
-        long ready       = ticketRepository.countByStatus(KitchenStatus.READY);
-        long completed   = ticketRepository.countByStatus(KitchenStatus.COMPLETED);
-        long cancelled   = ticketRepository.countByStatus(KitchenStatus.CANCELLED);
+        Long restaurantId = getCurrentUser().getRestaurantId();
+        long pending     = ticketRepository.countByRestaurantIdAndStatus(restaurantId, KitchenStatus.PENDING);
+        long preparing   = ticketRepository.countByRestaurantIdAndStatus(restaurantId, KitchenStatus.IN_PREPARATION);
+        long ready       = ticketRepository.countByRestaurantIdAndStatus(restaurantId, KitchenStatus.READY);
+        long completed   = ticketRepository.countByRestaurantIdAndStatus(restaurantId, KitchenStatus.COMPLETED);
+        long cancelled   = ticketRepository.countByRestaurantIdAndStatus(restaurantId, KitchenStatus.CANCELLED);
 
         return KitchenStatsResponse.builder()
                 .pendingOrders(pending)
@@ -159,7 +179,8 @@ public class KitchenServiceImpl implements KitchenService {
     // ─── Helpers ───────────────────────────────────────────────────────────────
 
     private KitchenTicket findById(Long id) {
-        return ticketRepository.findById(id)
+        Long restaurantId = getCurrentUser().getRestaurantId();
+        return ticketRepository.findByIdAndRestaurantId(id, restaurantId)
                 .orElseThrow(() -> new KitchenTicketNotFoundException(id));
     }
 
