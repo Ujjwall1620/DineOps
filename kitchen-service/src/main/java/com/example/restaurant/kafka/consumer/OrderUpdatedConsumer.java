@@ -55,8 +55,8 @@ public class OrderUpdatedConsumer {
                     || ticket.getStatus() == KitchenStatus.COMPLETED) {
                 log.warn("Ignoring update for orderId: {} — ticket already in terminal state {}",
                         event.getOrderId(), ticket.getStatus());
-                acknowledgment.acknowledge();
-                return;
+                throw new IllegalStateException(
+                        "Cannot update ticket in terminal state: " + ticket.getStatus());
             }
 
             // Poori item list replace karo (diff nahi) — safe aur idempotent

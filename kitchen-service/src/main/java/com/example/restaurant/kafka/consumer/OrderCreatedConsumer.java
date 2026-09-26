@@ -31,36 +31,43 @@ public class OrderCreatedConsumer {
 
         log.info("Processing batch of {} order-created events", events.size());
 
-        // Step 1: restaurantId ke hisaab se group karo (multi-tenant safe bulk-check ke liye)
-        Map<Long, List<OrderCreatedEvent>> eventsByRestaurant = events.stream()
-                .collect(Collectors.groupingBy(OrderCreatedEvent::getRestaurantId));
+        try {
+            // Step 1: restaurantId ke hisaab se group karo (multi-tenant safe bulk-check ke liye)
+            Map<Long, List<OrderCreatedEvent>> eventsByRestaurant = events.stream()
+                    .collect(Collectors.groupingBy(OrderCreatedEvent::getRestaurantId));
 
-        Set<String> existingKeys = new HashSet<>();
-        for (Map.Entry<Long, List<OrderCreatedEvent>> entry : eventsByRestaurant.entrySet()) {
-            Long restaurantId = entry.getKey();
-            List<Long> orderIds = entry.getValue().stream()
-                    .map(OrderCreatedEvent::getOrderId)
+            Set<String> existingKeys = new HashSet<>();
+            for (Map.Entry<Long, List<OrderCreatedEvent>> entry : eventsByRestaurant.entrySet()) {
+                Long restaurantId = entry.getKey();
+                List<Long> orderIds = entry.getValue().stream()
+                        .map(OrderCreatedEvent::getOrderId)
+                        .toList();
+
+                // Ek hi query — us restaurant ke saare relevant orderIds check ho jaate hain
+                ticketRepository.findByRestaurantIdAndOrderIdIn(restaurantId, orderIds)
+                        .forEach(t -> existingKeys.add(t.getRestaurantId() + "-" + t.getOrderId()));
+            }
+
+            // Step 2: sirf naye (non-duplicate) events ke liye ticket banao
+            List<KitchenTicket> newTickets = events.stream()
+                    .filter(e -> !existingKeys.contains(e.getRestaurantId() + "-" + e.getOrderId()))
+                    .map(this::toTicket)
                     .toList();
 
-            // Ek hi query — us restaurant ke saare relevant orderIds check ho jaate hain
-            ticketRepository.findByRestaurantIdAndOrderIdIn(restaurantId, orderIds)
-                    .forEach(t -> existingKeys.add(t.getRestaurantId() + "-" + t.getOrderId()));
+            if (newTickets.isEmpty()) {
+                log.info("All {} events were duplicates, nothing to insert", events.size());
+            } else {
+                ticketRepository.saveAll(newTickets); // ek hi batch insert
+                log.info("Inserted {} new kitchen tickets", newTickets.size());
+            }
+
+            acknowledgment.acknowledge();
+
+        } catch (Exception ex) {
+            log.error("Failed to process order-created batch of {} events. Error: {}",
+                    events.size(), ex.getMessage(), ex);
+            throw ex; // acknowledge nahi hua, Kafka redeliver karega
         }
-
-        // Step 2: sirf naye (non-duplicate) events ke liye ticket banao
-        List<KitchenTicket> newTickets = events.stream()
-                .filter(e -> !existingKeys.contains(e.getRestaurantId() + "-" + e.getOrderId()))
-                .map(this::toTicket)
-                .toList();
-
-        if (newTickets.isEmpty()) {
-            log.info("All {} events were duplicates, nothing to insert", events.size());
-        } else {
-            ticketRepository.saveAll(newTickets); // ek hi batch insert
-            log.info("Inserted {} new kitchen tickets", newTickets.size());
-        }
-
-        acknowledgment.acknowledge();
     }
 
     private KitchenTicket toTicket(OrderCreatedEvent event) {

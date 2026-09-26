@@ -75,6 +75,7 @@ public class OrderProducer {
 
         return OrderEvent.builder()
                 .orderId(order.getId())
+                .restaurantId(order.getRestaurantId())
                 .orderNumber(order.getOrderNumber())
                 .tableNumber(order.getTableNumber())
                 .waiterId(order.getWaiterId())

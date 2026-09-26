@@ -49,16 +49,16 @@ public class KitchenProducer {
             if (ex != null) {
                 log.error("Failed to publish event [{}] to topic [{}] for orderId [{}]: {}",
                         event.getEventType(), topic, event.getOrderId(), ex.getMessage(), ex);
-                // Re-throw wrapped so caller can catch if needed
-                throw new KafkaPublishException(
-                        "Failed to publish Kafka event [" + event.getEventType() + "] "
-                        + "to topic [" + topic + "]: " + ex.getMessage());
             } else {
                 log.debug("Event [{}] sent to topic [{}], partition [{}], offset [{}]",
                         event.getEventType(), topic,
                         result.getRecordMetadata().partition(),
                         result.getRecordMetadata().offset());
             }
+        }).exceptionally(ex -> {
+            log.error("CompletableFuture failed for event [{}] to topic [{}]: {}",
+                    event.getEventType(), topic, ex.getMessage(), ex);
+            return null;
         });
     }
 

@@ -17,6 +17,7 @@ import java.util.List;
 public class OrderEvent {
 
     private Long orderId;
+    private Long restaurantId;
     private String orderNumber;
     private Integer tableNumber;
     private Long waiterId;

@@ -54,14 +54,14 @@ public class OrderCancelledConsumer {
             if (ticket.getStatus() == KitchenStatus.READY
                     || ticket.getStatus() == KitchenStatus.COMPLETED) {
                 log.warn("Cannot cancel ticket {} — already in {} state. " +
-                                "Order service ko is mismatch ke baare me batana chahiye.",
+                                "Order service should not send cancel event for terminal tickets.",
                         ticket.getId(), ticket.getStatus());
-                acknowledgment.acknowledge();
-                return;
+                throw new IllegalStateException(
+                        "Cannot cancel ticket in terminal state: " + ticket.getStatus());
             }
 
             ticket.setStatus(KitchenStatus.CANCELLED);
-            ticket.setCancelledAt(LocalDateTime.from(Instant.now()));
+            ticket.setCancelledAt(LocalDateTime.now());
             ticketRepository.save(ticket);
 
             log.info("Kitchen ticket {} cancelled for orderId: {}", ticket.getId(), event.getOrderId());
