@@ -12,9 +12,10 @@ public interface AuthRepository extends JpaRepository<User, Integer> {
     )
     public User findByEmailCaseSensitive(@Param("email") String email);
 
-    @Query(
-            value = "SELECT COUNT(*) > 0 FROM users WHERE BINARY email = :email",
-            nativeQuery = true
-    )
+    @Query("""
+    SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END
+    FROM User u
+    WHERE u.email = :email
+""")
     boolean existsByEmailCaseSensitive(@Param("email") String email);
 }

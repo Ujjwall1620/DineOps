@@ -15,10 +15,14 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtUtil {
     private final AuthRepository repository;
-    private final String SECRET_KEY =
-            "VGhpc0lzQVN1cGVyU2VjdXJlSldUU2VjcmV0S2V5Rm9ySFMyNTY=";
+    
+    @org.springframework.beans.factory.annotation.Value("${jwt.secret:VGhpc0lzQVN1cGVyU2VjdXJlSldUU2VjcmV0S2V5Rm9ySFMyNTY=}")
+    private String secretKey;
+    
+    @org.springframework.beans.factory.annotation.Value("${jwt.expiration:86400000}")
+    private long jwtExpiration;
 
-    public String genrateToken(String email){
+    public String generateToken(String email){
         User user = repository.findByEmailCaseSensitive(email);
         return Jwts.builder()
                 .setSubject(email)
@@ -26,9 +30,9 @@ public class JwtUtil {
                 .claim("userId",user.getId())
                 .claim("restaurantId",user.getRestaurantId())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis()+86400000))
-                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()
-                ), SignatureAlgorithm.HS256
+                .setExpiration(new Date(System.currentTimeMillis()+jwtExpiration))
+                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes())
+                , SignatureAlgorithm.HS256
                 ).compact();
     }
 
@@ -37,7 +41,7 @@ public class JwtUtil {
 
         return Jwts.parserBuilder()
                 .setSigningKey(
-                        Keys.hmacShaKeyFor(SECRET_KEY.getBytes())
+                        Keys.hmacShaKeyFor(secretKey.getBytes())
                 )
                 .build()
                 .parseClaimsJws(token)

@@ -10,6 +10,7 @@ import com.example.Auth_service.Entity.User;
 import com.example.Auth_service.Repository.AuthRepository;
 import com.example.Auth_service.Repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final AuthRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public String ownerRegister(OwnerRegisterRequest request) {
@@ -62,7 +64,7 @@ public class RestaurantService {
         User owner = User.builder()
                 .username(ownerRequest.getUsername())
                 .email(ownerRequest.getEmail())
-                .password(ownerRequest.getPassword())
+                .password(passwordEncoder.encode(ownerRequest.getPassword()))
                 .role(Role.OWNER)
                 .restaurantId(restaurantId)
                 .build();
