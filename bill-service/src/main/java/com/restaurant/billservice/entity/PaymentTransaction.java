@@ -24,10 +24,9 @@ public class PaymentTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * Internal unique reference for every payment attempt.
-     * Format: TXN-{billId}-{timestamp}
-     */
+    @Column(name = "idempotency_key", nullable = false, unique = true, length = 100)
+    private String idempotencyKey;
+
     @Column(name = "transaction_ref", nullable = false, unique = true, length = 100)
     private String transactionRef;
 
@@ -42,15 +41,12 @@ public class PaymentTransaction {
     @Column(name = "payment_method", nullable = false, length = 30)
     private PaymentMethod paymentMethod;
 
-    /** Which gateway processed this attempt: dummy | razorpay | stripe */
     @Column(name = "gateway", nullable = false, length = 30)
     private String gateway;
 
-    /** ID returned by the payment gateway on success. */
     @Column(name = "gateway_transaction_id", length = 200)
     private String gatewayTransactionId;
 
-    /** Full raw response from gateway — stored for audit/dispute. */
     @Column(name = "gateway_response", columnDefinition = "TEXT")
     private String gatewayResponse;
 

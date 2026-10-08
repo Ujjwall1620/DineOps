@@ -1,6 +1,7 @@
 package com.restaurant.billservice.dto.request;
 
 import com.restaurant.billservice.enums.PaymentMethod;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,15 +18,8 @@ public class PaymentRequest {
 
     @NotNull(message = "Payment method is required")
     private PaymentMethod paymentMethod;
-
-    /**
-     * Client-supplied idempotency key.
-     * If same key is used within the configured window, the previous
-     * result is returned without re-charging. Prevents double payment on retries.
-     */
+    @NotBlank(message = "Idempotency key is required")
     private String idempotencyKey;
-
-    // Set internally by service — not from request body
     private BigDecimal amount;
     private String     billNumber;
     private Long       billId;

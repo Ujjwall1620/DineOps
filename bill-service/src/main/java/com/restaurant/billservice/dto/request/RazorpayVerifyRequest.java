@@ -5,12 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * The 3 values Razorpay sends to the frontend after customer completes payment.
- * Frontend must POST these to /api/bills/{billId}/verify-payment.
- *
- * NEVER skip verification. Anyone can fake a payment without it.
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

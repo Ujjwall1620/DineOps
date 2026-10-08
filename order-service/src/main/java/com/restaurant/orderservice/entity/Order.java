@@ -35,7 +35,7 @@ public class Order {
     @Column(name = "waiter_id", nullable = false)
     private Long waiterId;
 
-    @Column(name = "waiter_name", nullable = false, length = 100)
+    @Column(name = "waiter_email", nullable = false, length = 100)
     private String waiterEmail;
 
     @Enumerated(EnumType.STRING)

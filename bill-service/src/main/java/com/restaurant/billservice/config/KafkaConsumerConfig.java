@@ -1,6 +1,6 @@
 package com.restaurant.billservice.config;
 
-import com.restaurant.billservice.kafka.consumer.OrderReadyEvent;
+import com.restaurant.billservice.kafka.consumer.OrderCreatedEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +10,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,31 +25,68 @@ public class KafkaConsumerConfig {
     private String groupId;
 
     @Bean
-    public ConsumerFactory<String, OrderReadyEvent> orderReadyConsumerFactory() {
-        JsonDeserializer<OrderReadyEvent> deserializer =
-                new JsonDeserializer<>(OrderReadyEvent.class, false);
-        deserializer.addTrustedPackages("*");
+    public ConsumerFactory<String, OrderCreatedEvent> orderReadyConsumerFactory() {
+
+        JacksonJsonDeserializer<OrderCreatedEvent> deserializer =
+                new JacksonJsonDeserializer<>(OrderCreatedEvent.class);
 
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 
-        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), deserializer);
+        props.put(
+                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapServers
+        );
+
+        props.put(
+                ConsumerConfig.GROUP_ID_CONFIG,
+                groupId
+        );
+
+        props.put(
+                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
+                "earliest"
+        );
+
+        props.put(
+                ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,
+                false
+        );
+
+        // Maximum records received in one poll
+        props.put(
+                ConsumerConfig.MAX_POLL_RECORDS_CONFIG,
+                100
+        );
+
+        props.put(
+                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+                StringDeserializer.class
+        );
+
+        return new DefaultKafkaConsumerFactory<>(
+                props,
+                new StringDeserializer(),
+                deserializer
+        );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, OrderReadyEvent>
-            kafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, OrderCreatedEvent>
+    kafkaListenerContainerFactory() {
 
-        ConcurrentKafkaListenerContainerFactory<String, OrderReadyEvent> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, OrderCreatedEvent>
+                factory = new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(orderReadyConsumerFactory());
-        // Manual immediate acknowledgment — mirrors Kitchen Service exactly
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+
+        // Enable batch consumption
+        factory.setBatchListener(true);
+
+        // Manual acknowledgement
+        factory.getContainerProperties()
+                .setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+
+        // 3 Kafka consumers
         factory.setConcurrency(3);
 
         return factory;

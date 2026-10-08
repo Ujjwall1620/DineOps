@@ -31,11 +31,6 @@ public class BillItem {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    /**
-     * Price frozen at order creation time — never re-fetched from Menu Service.
-     * Sourced from the order-ready Kafka event which carries Order Service's
-     * already-frozen price_per_unit.
-     */
     @Column(name = "price_per_unit", nullable = false, precision = 10, scale = 2)
     private BigDecimal pricePerUnit;
 

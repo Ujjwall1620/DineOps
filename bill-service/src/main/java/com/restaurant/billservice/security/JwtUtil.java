@@ -1,13 +1,13 @@
-package com.restaurant.orderservice.security;
+package com.restaurant.billservice.security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
@@ -20,19 +20,23 @@ public class JwtUtil {
     @Value("${jwt.expiration:86400000}")
     private long jwtExpiration;
 
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+    private SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(
+                secretKey.getBytes(StandardCharsets.UTF_8)
+        );
     }
+
 
     /**
      * Extract all claims from a JWT token.
      */
     public Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+            return Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
     }
 
     /**
@@ -63,7 +67,7 @@ public class JwtUtil {
      * Extract restaurant ID from JWT claims.
      */
 
-    public  Long extractRestaurantID(String token) {
+    public Long extractRestaurantId(String token) {
         Claims claims = extractAllClaims(token);
         Object restaurantIdClaim = claims.get("restaurantId");
         if (restaurantIdClaim instanceof Integer) {
@@ -88,10 +92,10 @@ public class JwtUtil {
      */
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey())
+            Jwts.parser()
+                    .verifyWith(getSigningKey())
                     .build()
-                    .parseClaimsJws(token);
+                    .parseSignedClaims(token);
             return true;
         } catch (MalformedJwtException e) {
             log.error("Invalid JWT token: {}", e.getMessage());

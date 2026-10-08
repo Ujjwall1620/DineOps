@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class OrderProducer {
 
-    private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
+    private final KafkaTemplate<String, OrderCreatedEvent> kafkaTemplate;
 
     @Value("${kafka.topic.order-created}")
     private String orderCreatedTopic;
@@ -28,25 +28,25 @@ public class OrderProducer {
     private String orderCancelledTopic;
 
     public void publishOrderCreated(Order order) {
-        OrderEvent event = buildOrderEvent(order, "ORDER_CREATED");
+        OrderCreatedEvent event = buildOrderEvent(order, "ORDER_CREATED");
         sendEvent(orderCreatedTopic, event);
         log.info("Published ORDER_CREATED event for order: {}", order.getOrderNumber());
     }
 
     public void publishOrderUpdated(Order order) {
-        OrderEvent event = buildOrderEvent(order, "ORDER_UPDATED");
+        OrderCreatedEvent event = buildOrderEvent(order, "ORDER_UPDATED");
         sendEvent(orderUpdatedTopic, event);
         log.info("Published ORDER_UPDATED event for order: {}", order.getOrderNumber());
     }
 
     public void publishOrderCancelled(Order order) {
-        OrderEvent event = buildOrderEvent(order, "ORDER_CANCELLED");
+        OrderCreatedEvent event = buildOrderEvent(order, "ORDER_CANCELLED");
         sendEvent(orderCancelledTopic, event);
         log.info("Published ORDER_CANCELLED event for order: {}", order.getOrderNumber());
     }
 
-    private void sendEvent(String topic, OrderEvent event) {
-        CompletableFuture<SendResult<String, OrderEvent>> future =
+    private void sendEvent(String topic, OrderCreatedEvent event) {
+        CompletableFuture<SendResult<String, OrderCreatedEvent>> future =
                 kafkaTemplate.send(topic, event.getOrderId().toString(), event);
 
         future.whenComplete((result, ex) -> {
@@ -62,9 +62,9 @@ public class OrderProducer {
         });
     }
 
-    private OrderEvent buildOrderEvent(Order order, String eventType) {
+    private OrderCreatedEvent buildOrderEvent(Order order, String eventType) {
         var orderItems = order.getItems().stream()
-                .map(item -> OrderEvent.OrderItemEvent.builder()
+                .map(item -> OrderCreatedEvent.OrderItemEvent.builder()
                         .menuItemId(item.getMenuItemId())
                         .menuItemName(item.getMenuItemName())
                         .quantity(item.getQuantity())
@@ -73,7 +73,7 @@ public class OrderProducer {
                         .build())
                 .toList();
 
-        return OrderEvent.builder()
+        return OrderCreatedEvent.builder()
                 .orderId(order.getId())
                 .restaurantId(order.getRestaurantId())
                 .orderNumber(order.getOrderNumber())

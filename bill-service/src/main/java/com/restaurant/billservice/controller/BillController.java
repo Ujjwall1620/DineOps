@@ -8,17 +8,13 @@ import com.restaurant.billservice.entity.PaymentTransaction;
 import com.restaurant.billservice.enums.BillStatus;
 import com.restaurant.billservice.enums.PaymentMethod;
 import com.restaurant.billservice.enums.TransactionStatus;
-import com.restaurant.billservice.exception.BillNotFoundException;
-import com.restaurant.billservice.exception.InvalidBillStateException;
 import com.restaurant.billservice.kafka.producer.BillProducer;
 import com.restaurant.billservice.payment.gateway.RazorpayPaymentGateway;
 import com.restaurant.billservice.repository.BillRepository;
 import com.restaurant.billservice.service.BillService;
-import com.restaurant.billservice.enums.BillStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -92,21 +88,6 @@ public class BillController {
     // PAYMENT LINK GENERATION
     // ─────────────────────────────────────────────────────────────────────────
 
-    /**
-     * POST /api/bills/{billId}/payment-link
-     *
-     * Generates a Razorpay Payment Link and returns the short URL.
-     *
-     * FLOW:
-     * 1. Cashier calls this endpoint
-     * 2. You get back: { "paymentUrl": "https://rzp.io/i/abc123" }
-     * 3. Send that URL to the customer via WhatsApp/SMS
-     * 4. Customer opens the link and pays
-     * 5. Razorpay calls your /webhook endpoint automatically
-     * 6. Bill is marked PAID
-     *
-     * No frontend needed. No checkout popup. Customer pays on Razorpay's page.
-     */
     @Operation(
         summary = "Generate Razorpay payment link",
         description = "Creates a payment link. Send the returned paymentUrl to the customer " +

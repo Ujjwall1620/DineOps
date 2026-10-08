@@ -27,13 +27,12 @@ public class Bill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "bill_number", nullable = false, unique = true, length = 50)
+    @Column(name = "bill_number", nullable = false, length = 50)
     private String billNumber;
 
-    /**
-     * orderId from Order Service — unique, not a FK (separate DB).
-     * Idempotency guard: one bill per order, always.
-     */
+    @Column(name = "restaurant_id", nullable = false)
+    private Long restaurantId;
+
     @Column(name = "order_id", nullable = false, unique = true)
     private Long orderId;
 
@@ -46,10 +45,9 @@ public class Bill {
     @Column(name = "waiter_id", nullable = false)
     private Long waiterId;
 
-    @Column(name = "waiter_name", nullable = false, length = 100)
-    private String waiterName;
+    @Column(name = "waiter_email", nullable = false, length = 100)
+    private String waiterEmail;
 
-    // ─── Financial fields ──────────────────────────────────────────────────────
 
     @Column(name = "subtotal", nullable = false, precision = 10, scale = 2)
     private BigDecimal subtotal;
@@ -71,8 +69,6 @@ public class Bill {
     @Column(name = "grand_total", nullable = false, precision = 10, scale = 2)
     private BigDecimal grandTotal;
 
-    // ─── Status and payment ────────────────────────────────────────────────────
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
     @Builder.Default
@@ -82,21 +78,10 @@ public class Bill {
     @Column(name = "payment_method", length = 30)
     private PaymentMethod paymentMethod;
 
-    /**
-     * Client-supplied idempotency key for payment requests.
-     * Prevents double-charging on retries.
-     */
-    @Column(name = "idempotency_key", length = 100, unique = true)
+    @Column(name = "idempotency_key", length = 100)
     private String idempotencyKey;
 
-    /** Razorpay short URL returned when payment link is created. */
-    @Column(name = "payment_url", length = 500)
-    private String paymentUrl;
 
-    /**
-     * Optimistic locking — prevents concurrent payment attempts
-     * from both succeeding on the same bill.
-     */
     @Version
     @Column(name = "version", nullable = false)
     private Long version;
@@ -116,7 +101,6 @@ public class Bill {
     @Builder.Default
     private List<PaymentTransaction> transactions = new ArrayList<>();
 
-    // ─── Audit ────────────────────────────────────────────────────────────────
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

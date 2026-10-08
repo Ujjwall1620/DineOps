@@ -8,6 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67a9b05b-8fe9-4a42-a805-bb1903b61707" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/doNotAskNotifications.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Auth-service/docker-compose.yml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Auth-service/dockerfile" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Controller/RestaurantController.java" afterDir="false" />
@@ -15,6 +16,9 @@
       <change afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/DTO/OwnerRegisterRequest.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/DTO/RestaurantResponse.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Service/RestaurantService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/kafka/consumer/OrderCreatedEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Auth-service/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Controller/AuthController.java" afterDir="false" />
@@ -24,8 +28,99 @@
       <change beforePath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Security/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Security/JwtUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Security/securityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Security/securityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/src/main/java/com/example/Auth_service/Service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/kafka/OrderEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/kafka/OrderEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Auth-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Auth-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/config/KafkaConsumerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/config/KafkaConsumerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/controller/BillController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/controller/BillController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/dto/request/PaymentRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/dto/request/PaymentRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/dto/request/RazorpayVerifyRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/dto/request/RazorpayVerifyRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/dto/response/BillResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/dto/response/BillResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/dto/response/PaymentGatewayResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/dto/response/PaymentGatewayResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/entity/Bill.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/entity/Bill.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/entity/BillItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/entity/BillItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/entity/PaymentTransaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/entity/PaymentTransaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/kafka/consumer/OrderReadyConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/kafka/consumer/OrderCreatedConsumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/kafka/consumer/OrderReadyEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/repository/BillRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/repository/BillRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/service/BillService.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/service/BillService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/service/impl/BillServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/java/com/restaurant/billservice/service/impl/BillServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/bill-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/BillServiceApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/config/BillingConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/config/JacksonConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/config/KafkaConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/config/KafkaConsumerConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/config/OpenApiConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/controller/BillController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/request/PaymentRequest$PaymentRequestBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/request/PaymentRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/request/RazorpayVerifyRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/response/ApiResponse$ApiResponseBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/response/ApiResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/response/BillItemResponse$BillItemResponseBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/response/BillItemResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/response/BillResponse$BillResponseBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/response/BillResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/response/PaymentGatewayResponse$PaymentGatewayResponseBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/response/PaymentGatewayResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/response/PaymentTransactionResponse$PaymentTransactionResponseBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/dto/response/PaymentTransactionResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/entity/Bill$BillBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/entity/Bill.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/entity/BillItem$BillItemBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/entity/BillItem.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/entity/PaymentTransaction$PaymentTransactionBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/entity/PaymentTransaction.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/enums/BillStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/enums/PaymentMethod.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/enums/TransactionStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/exception/BillNotFoundException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/exception/DuplicatePaymentException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/exception/GlobalExceptionHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/exception/InvalidBillStateException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/exception/InvalidPaymentMethodException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/exception/KafkaPublishException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/exception/PaymentFailedException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/kafka/consumer/OrderReadyConsumer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/kafka/consumer/OrderReadyEvent$OrderItemPayload.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/kafka/consumer/OrderReadyEvent$OrderReadyEventBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/kafka/consumer/OrderReadyEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/kafka/producer/BillGeneratedEvent$BillGeneratedEventBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/kafka/producer/BillGeneratedEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/kafka/producer/BillProducer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/kafka/producer/PaymentStatusEvent$PaymentStatusEventBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/kafka/producer/PaymentStatusEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/payment/gateway/DummyPaymentGateway.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/payment/gateway/PaymentGateway.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/payment/gateway/RazorpayPaymentGateway.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/payment/gateway/StripePaymentGateway.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/payment/strategy/PaymentGatewayFactory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/repository/BillRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/repository/PaymentTransactionRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/service/BillMapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/service/BillNumberGenerator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/service/BillService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/com/restaurant/billservice/service/impl/BillServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/classes/schema.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bill-service/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/kitchen-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/kitchen-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kitchen-service/src/main/java/com/example/restaurant/Security/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/kitchen-service/src/main/java/com/example/restaurant/Security/JwtAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kitchen-service/src/main/java/com/example/restaurant/Security/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/kitchen-service/src/main/java/com/example/restaurant/Security/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kitchen-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/kitchen-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kitchen-service/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/kitchen-service/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/security/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/src/main/java/com/restaurant/menuservice/security/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu-service/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/menu-service/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/entity/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/entity/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/kafka/KafkaConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/kafka/KafkaConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/kafka/OrderEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/kafka/OrderCreatedEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/kafka/OrderProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/kafka/OrderProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/security/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/security/JwtAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/security/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/com/restaurant/orderservice/security/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/target/classes/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +145,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="D:\mavenRepo" />
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -73,38 +176,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.AuthServiceApplication.executor": "Run",
-    "Application.BillServiceApplication.executor": "Run",
-    "Application.KitchenServiceApplication.executor": "Run",
-    "Application.MenuServiceApplication.executor": "Run",
-    "Application.OrderServiceApplication.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "Spring Boot.AuthServiceApplication.executor": "Run",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "copilot.chat.legacySessionMetadata.migrated": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Ujjwal/projects/DineOps",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.jshint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.jshint": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDKs",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.AuthServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.BillServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.KitchenServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MenuServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.OrderServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AuthServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;copilot.chat.legacySessionMetadata.migrated&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Downloads/DineOps/bill-service/src/main/java/com/restaurant/billservice&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.jshint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.example.kitchen_Service.Serivce" />
@@ -112,15 +217,59 @@
       <recent name="com.example.kitchen_Service.DTO." />
       <recent name="com.example.kitchen_Service.Serivce." />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Downloads\DineOps\bill-service\src\main\java\com\restaurant\billservice" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.restaurant.billservice.security" />
       <recent name="com.example.restaurant.Security" />
     </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="KtorApplicationConfigurationType" />
+        <option value="MicronautRunConfigurationType" />
+        <option value="QuarkusRunConfigurationType" />
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.AuthServiceApplication">
+    <configuration name="AuthServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="Auth-Service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.Auth_service.AuthServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BillServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="bill-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.restaurant.billservice.BillServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MenuServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="menu-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.restaurant.menuservice.MenuServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="OrderServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="order-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.restaurant.orderservice.OrderServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-63390994e64e-intellij.indexing.shared.core-IU-262.8665.337" />
-        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.8665.337" />
+        <option value="bundled-jdk-30f59d01ecdd-a203e0a19954-intellij.indexing.shared.core-IU-262.10968.63" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.10968.63" />
       </set>
     </attachedChunks>
   </component>
@@ -152,5 +301,9 @@
     <option featureType="dependencySupport" implementationName="java:jakarta.persistence:jakarta.persistence-api" />
     <option featureType="dependencySupport" implementationName="java:org.springframework:spring-messaging" />
     <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

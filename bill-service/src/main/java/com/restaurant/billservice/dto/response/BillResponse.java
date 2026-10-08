@@ -35,7 +35,6 @@ public class BillResponse {
 
     private BillStatus    status;
     private PaymentMethod paymentMethod;
-    private String        paymentUrl;        // Razorpay link — send to customer
 
     private List<BillItemResponse>           items;
     private List<PaymentTransactionResponse> transactions;

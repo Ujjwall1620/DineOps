@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Long userId = jwtUtil.extractUserId(token);
                 String username = jwtUtil.extractUsername(token);
                 String role = jwtUtil.extractRole(token);
-                Long restaurantId = jwtUtil.extractRestaurantID(token);
+                Long restaurantId = jwtUtil.extractRestaurantId(token);
 
                 JwtUserDetails userDetails = JwtUserDetails.builder()
                         .userId(userId)

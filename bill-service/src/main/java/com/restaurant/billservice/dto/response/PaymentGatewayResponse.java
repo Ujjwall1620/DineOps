@@ -15,7 +15,6 @@ public class PaymentGatewayResponse {
 
     private boolean     success;
     private String      gatewayTransactionId;
-    private String      paymentUrl;          // Razorpay short URL — send this to customer
     private String      rawResponse;
     private String      failureReason;
     private BigDecimal  amountProcessed;

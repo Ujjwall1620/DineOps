@@ -45,8 +45,8 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, OrderEvent> orderEventKafkaTemplate(
-            ProducerFactory<String, OrderEvent> producerFactory) {
+    public KafkaTemplate<String, OrderCreatedEvent> orderEventKafkaTemplate(
+            ProducerFactory<String, OrderCreatedEvent> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 }
